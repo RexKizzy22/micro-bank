@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/user/Desktop/dev/GO/simple-bank'
+docker run --name=postgres14 -p 5430:5432 -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+make: Leaving directory `/Users/user/Desktop/dev/GO/simple-bank'
+ 
