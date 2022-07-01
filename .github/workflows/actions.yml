@@ -1,4 +1,4 @@
-name: Go
+name: simple-bank-test
 
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
 
     - name: Install golang-migrate
       run: | 
-        curl -L --output migrate https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
         mv migrate /usr/bin/migrate
         which migrate
 
