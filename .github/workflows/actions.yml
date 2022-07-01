@@ -37,16 +37,16 @@ jobs:
         go-version: 1.18
 
     - name: Install golang-migrate
-      run: |
-        curl -L --output migrate https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
-        sudo mv migrate /usr/bin/migrate
-        which migrate
+      run: curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
 
     - name: Run Migrations
       run: make migrateup
 
     # - name: Build
     #   run: go build -v ./...
+
+    # sudo mv migrate /usr/bin/migrate
+    # which migrate
 
     - name: Test
       run: make test
