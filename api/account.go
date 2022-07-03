@@ -6,11 +6,12 @@ import (
 
 	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 )
 
 type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
-	Currency string `json:"currency" binding:"required, oneof=USD EUR"`
+	Currency string `json:"currency" binding:"required, currency"`
 }
 
 func (route *Server) createAccount(ctx *gin.Context) {
@@ -21,13 +22,20 @@ func (route *Server) createAccount(ctx *gin.Context) {
 	}
 
 	arg := db.CreateAccountParams{
-		Owner: req.Owner,
+		Owner:    req.Owner,
 		Currency: req.Currency,
-		Balance: 0,
+		Balance:  0,
 	}
 
 	account, err := route.store.CreateAccount(ctx, arg)
 	if err != nil {
+		if pErr, ok := err.(*pq.Error); ok {
+			switch pErr.Code.Name() {
+				case "foreign_key_violation", "unique_violation":
+					ctx.JSON(http.StatusForbidden, errorResponse(err))
+					return
+			}
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -60,7 +68,7 @@ func (route *Server) getAccount(ctx *gin.Context) {
 }
 
 type listAccountRequest struct {
-	Page_ID int32 `form:"page_id" binding:"required, min=1"`
+	Page_ID   int32 `form:"page_id" binding:"required, min=1"`
 	Page_Size int32 `form:"page_size" binding:"required, min=5, max=10"`
 }
 
@@ -72,7 +80,7 @@ func (route *Server) listAccount(ctx *gin.Context) {
 	}
 
 	arg := db.ListAccountsParams{
-		Limit: req.Page_Size,
+		Limit:  req.Page_Size,
 		Offset: (req.Page_ID - 1) * req.Page_Size,
 	}
 
