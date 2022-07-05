@@ -36,7 +36,7 @@ func newUserResponse(user db.User) userResponse {
 	}
 }
 
-func (route *Server) createUser(ctx *gin.Context) {
+func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -56,7 +56,7 @@ func (route *Server) createUser(ctx *gin.Context) {
 		HashedPassword: hashPassword,
 	}
 
-	user, err := route.store.CreateUser(ctx, arg)
+	user, err := server.store.CreateUser(ctx, arg)
 	if err != nil {
 		if pErr, ok := err.(*pq.Error); ok {
 			switch pErr.Code.Name() {
