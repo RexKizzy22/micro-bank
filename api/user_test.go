@@ -49,7 +49,7 @@ func EqCreateUserMatcher(arg db.CreateUserParams, password string) gomock.Matche
 }
 
 func TestCreateUserAPI(t *testing.T) {
-	user, password := randomUser(t)
+	user, hashedPassword := randomUser(t)
 
 	testCases := []struct {
 		name          string
@@ -73,13 +73,13 @@ func TestCreateUserAPI(t *testing.T) {
 					HashedPassword: user.HashedPassword,
 				}
 				store.EXPECT().
-					CreateUser(gomock.Any(), EqCreateUserMatcher(arg, password)).
+					CreateUser(gomock.Any(), EqCreateUserMatcher(arg, hashedPassword)).
 					Times(1).
 					Return(user, nil)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
-				requireBodyMatchuser(t, recorder.Body, user)
+				requireBodyMatchUser(t, recorder.Body, user)
 			},
 		},
 		// TODO: complete other tests 
@@ -183,11 +183,12 @@ func randomUser(t *testing.T) (db.User, string) {
 	}, hashedPassword
 }
 
-func requireBodyMatchuser(t *testing.T, body *bytes.Buffer, user db.User) {
+func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
 	data, err := ioutil.ReadAll(body)
 	require.NoError(t, err)
 
 	var gotuser db.User
 	err = json.Unmarshal(data, &gotuser)
+	require.NoError(t, err)
 	require.Equal(t, user, gotuser)
 }

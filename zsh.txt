@@ -1,0 +1,8 @@
+ 1001  export PATH=/bin:/usr/bin:/usr/local/bin:${PATH}
+ 1005  export PATH=$PATH:~/go/bin
+ 1011  export PATH=$PATH:/usr/local/go/bin
+ 1012  history | grep "PATH" "GO" >> zsh.txt
+ 1013  history | grep "PATH GO" >> zsh.txt
+ 1002  echo $GOBIN
+ 1004  export GOBIN=~/go/bin/
+ 1008  echo $GOBIN

@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=SimpleBank
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=simple-bank
+    ports:
+      - 5432:5432
+
+  api:
+    build:
+      context:  .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - DB_SOURCE=postgresql://postgres:SimpleBank@postgres:5432/simple-bank?sslmode=disable

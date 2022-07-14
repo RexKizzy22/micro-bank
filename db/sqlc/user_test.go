@@ -21,7 +21,6 @@ func createRandomUser(t *testing.T) User {
 	}
 
 	user, err := testQueries.CreateUser(context.Background(), arg)
-
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
 
@@ -30,7 +29,6 @@ func createRandomUser(t *testing.T) User {
 	require.Equal(t, arg.Email, user.Email)
 	require.Equal(t, arg.FullName, user.FullName)
 
-	require.NotZero(t, user.PasswordChangedAt)
 	require.NotZero(t, user.CreatedAt)
 
 	return user

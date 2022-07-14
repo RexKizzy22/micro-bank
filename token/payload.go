@@ -38,6 +38,7 @@ func NewPayload(username string, duration time.Duration) (*Payload, error) {
 	return payload, nil
 }
 
+// checks for expired tokens
 func (p *Payload) Valid() error {
 	if time.Now().After(p.ExpiredAt) {
 		return ErrExpiredToken

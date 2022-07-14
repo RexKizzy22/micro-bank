@@ -15,6 +15,7 @@ type createAccountRequest struct {
 	Currency string `json:"currency" binding:"required, currency"`
 }
 
+// @Security ApiKeyAuth
 func (route *Server) createAccount(ctx *gin.Context) {
 	var req createAccountRequest
 
@@ -49,6 +50,7 @@ type getAccountRequest struct {
 	ID int64 `uri:"id" binding:"required, min=1"`
 }
 
+// @Security ApiKeyAuth
 func (route *Server) getAccount(ctx *gin.Context) {
 	var req getAccountRequest
 
@@ -81,6 +83,7 @@ type listAccountRequest struct {
 	Page_Size int32 `form:"page_size" binding:"required, min=5, max=10"`
 }
 
+// @Security ApiKeyAuth
 func (server *Server) listAccount(ctx *gin.Context) {
 	var req listAccountRequest
 

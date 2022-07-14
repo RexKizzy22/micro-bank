@@ -18,6 +18,7 @@ type transferRequest struct {
 	Currency      string `json:"currency" binding:"required, currency"`
 }
 
+// @Security ApiKeyAuth
 func (server *Server) createTransfer(ctx *gin.Context) {
 	var req transferRequest
 
