@@ -1,4 +1,4 @@
-name: simple-bank-test
+name: Run unit test
 
 on:
   push:
@@ -29,6 +29,7 @@ jobs:
           --health-retries 5
 
     steps:
+    - name: Check out code on github repository
     - uses: actions/checkout@v3
 
     - name: Set up Go
