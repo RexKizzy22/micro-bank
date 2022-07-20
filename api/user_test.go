@@ -21,7 +21,7 @@ import (
 )
 
 type eqCreateUserMatcher struct {
-	arg db.CreateUserParams
+	arg      db.CreateUserParams
 	password string
 }
 
@@ -60,16 +60,16 @@ func TestCreateUserAPI(t *testing.T) {
 		{
 			name: "Ok",
 			body: gin.H{
-				"username": user.Username,
-				"full_name": user.FullName,
-				"email": user.Email,
+				"username":      user.Username,
+				"full_name":     user.FullName,
+				"email":         user.Email,
 				"hash_password": user.HashedPassword,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.CreateUserParams{
-					Username: user.Username,
-					Email: user.Email,
-					FullName: user.FullName,
+					Username:       user.Username,
+					Email:          user.Email,
+					FullName:       user.FullName,
 					HashedPassword: user.HashedPassword,
 				}
 				store.EXPECT().
@@ -82,7 +82,7 @@ func TestCreateUserAPI(t *testing.T) {
 				requireBodyMatchUser(t, recorder.Body, user)
 			},
 		},
-		// TODO: complete other tests 
+		// TODO: complete other tests
 		// {
 		// 	name:      "DuplicateUser",
 		// 	body: user.Username,
@@ -174,7 +174,7 @@ func TestCreateUserAPI(t *testing.T) {
 func randomUser(t *testing.T) (db.User, string) {
 	hashedPassword, err := util.HashPassword(util.RandomString(6))
 	require.NoError(t, err)
-	
+
 	return db.User{
 		Username:       util.RandomString(6),
 		FullName:       util.RandomOwner(),

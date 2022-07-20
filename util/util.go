@@ -15,7 +15,7 @@ func init() {
 
 // generates random numbers between min and max
 func RandomInt(min, max int64) int64 {
-	return min + rand.Int63n(max-min + 1)
+	return min + rand.Int63n(max-min+1)
 }
 
 // generates random string of n characters
@@ -31,7 +31,7 @@ func RandomString(n int) string {
 	return sb.String()
 }
 
-// generates a random owner 
+// generates a random owner
 func RandomOwner() string {
 	return RandomString(6)
 }
@@ -51,4 +51,3 @@ func RandomCurrency() string {
 func RandomEmail() string {
 	return fmt.Sprintf("%s@gmail.com", RandomOwner())
 }
-

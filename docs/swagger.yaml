@@ -1,4 +1,236 @@
+definitions:
+  api.loginUserResponse:
+    properties:
+      access_token:
+        type: string
+      user:
+        $ref: '#/definitions/api.userResponse'
+    type: object
+  api.userResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      password_changed_at:
+        type: string
+      username:
+        type: string
+    type: object
+  db.Account:
+    properties:
+      balance:
+        type: integer
+      created_at:
+        type: string
+      currency:
+        type: string
+      id:
+        type: integer
+      owner:
+        type: string
+    type: object
+  db.Entry:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        description: can be negative or positive
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+    type: object
+  db.Transfer:
+    properties:
+      amount:
+        description: must be positive
+        type: integer
+      created_at:
+        type: string
+      from_account_id:
+        type: integer
+      id:
+        type: integer
+      to_account_id:
+        type: integer
+    type: object
+  db.TransferTxResult:
+    properties:
+      from_account:
+        $ref: '#/definitions/db.Account'
+      from_entry:
+        $ref: '#/definitions/db.Entry'
+      to_account:
+        $ref: '#/definitions/db.Account'
+      to_entry:
+        $ref: '#/definitions/db.Entry'
+      transfer:
+        $ref: '#/definitions/db.Transfer'
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /accounts:
+    get:
+      parameters:
+      - description: Account Currency
+        in: body
+        name: currency
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/db.Account'
+              type: array
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: lists all accounts for a specific User ID
+    post:
+      parameters:
+      - description: Account Currency
+        in: body
+        name: currency
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Account'
+      security:
+      - ApiKeyAuth: []
+      summary: creates a new account with a given currency
+  /accounts/:id:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.Account'
+      security:
+      - ApiKeyAuth: []
+      summary: gets an existing account for a specified User ID
+  /transfer:
+    post:
+      parameters:
+      - description: Account Currency
+        in: body
+        name: currency
+        required: true
+        schema:
+          type: string
+      - description: Amount of Money
+        in: body
+        name: amount
+        required: true
+        schema:
+          type: string
+      - description: From Account ID
+        in: body
+        name: from_account_id
+        required: true
+        schema:
+          type: string
+      - description: To Account ID
+        in: body
+        name: to_account_id
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.TransferTxResult'
+      security:
+      - ApiKeyAuth: []
+      summary: transfer money between accounts with same currency
+  /user:
+    post:
+      parameters:
+      - description: Username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Email Address
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: Full Name
+        in: body
+        name: fullname
+        required: true
+        schema:
+          type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.userResponse'
+      summary: creates a new user
+  /user/login:
+    post:
+      parameters:
+      - description: Username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.loginUserResponse'
+      summary: log in an existing user
+securityDefinitions:
+  ApiAuthKey:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

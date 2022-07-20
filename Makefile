@@ -1,4 +1,4 @@
-server:
+server: swag
 	swag fmt
 	go fmt ./...
 	go run main.go
@@ -40,8 +40,16 @@ sqlc:
 test:
 	go test -v -cover ./...
 
-
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/simple-bank/db/sqlc Store
 
-.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 sqlc test server swag
+awsecrlogin:
+	aws ecr get-login-password | docker login --username AWS --password-stdin 335858042864.dkr.ecr.us-west-2.amazonaws.com
+
+awssecrets:
+	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
+
+kubeconfig:
+	aws eks update-kubeconfig --name simple-bank --region us-west-2
+
+.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 sqlc test server swag awssecrets

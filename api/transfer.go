@@ -18,7 +18,16 @@ type transferRequest struct {
 	Currency      string `json:"currency" binding:"required, currency"`
 }
 
-// @Security ApiKeyAuth
+// @Summary   transfer money between accounts with same currency
+// @Accepts   json
+// @Produce   json
+// @Param     currency         body      string  true  "Account Currency"
+// @Param     amount           body      string  true  "Amount of Money"
+// @Param     from_account_id  body      string  true  "From Account ID"
+// @Param     to_account_id    body      string  true  "To Account ID"
+// @Success   200              {object}  db.TransferTxResult
+// @Security  ApiKeyAuth
+// @Router    /transfer [POST]
 func (server *Server) createTransfer(ctx *gin.Context) {
 	var req transferRequest
 

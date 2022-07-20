@@ -41,6 +41,7 @@ jobs:
       run: | 
         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
         sudo mv migrate /usr/bin/migrate
+        chmod +x /usr/bin/migrate
         which migrate
 
     - name: Run Migrations
@@ -49,5 +50,5 @@ jobs:
     # - name: Build
     #   run: go build -v ./...
     
-    - name: Test
+    - name: Run test
       run: make test

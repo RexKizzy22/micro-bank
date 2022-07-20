@@ -5,15 +5,15 @@ import (
 	"log"
 
 	"github.com/Rexkizzy22/simple-bank/api"
-	"github.com/Rexkizzy22/simple-bank/docs"
 	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
+	"github.com/Rexkizzy22/simple-bank/docs"
 	"github.com/Rexkizzy22/simple-bank/util"
 	_ "github.com/lib/pq"
 )
 
-// @securitydefinitions.apiKey ApiAuthKey
-// @in header
-// @name Authorization
+// @securitydefinitions.apiKey  ApiAuthKey
+// @in                          header
+// @name                        Authorization
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
@@ -27,7 +27,7 @@ func main() {
 	docs.SwaggerInfo.Host = config.ServerAddress
 	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http"}
-	
+
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)

@@ -14,8 +14,8 @@ func createRandomAccount(t *testing.T) Account {
 	user := createRandomUser(t)
 
 	arg := CreateAccountParams{
-		Owner: user.Username,
-		Balance: util.RandomMoney(),
+		Owner:    user.Username,
+		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 
@@ -57,7 +57,7 @@ func TestUpdateAccount(t *testing.T) {
 	account1 := createRandomAccount(t)
 
 	arg := UpdateAccountParams{
-		ID: account1.ID,
+		ID:      account1.ID,
 		Balance: util.RandomMoney(),
 	}
 
@@ -81,7 +81,6 @@ func TestDeleteAccount(t *testing.T) {
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 
-
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, account2)
@@ -94,8 +93,8 @@ func TestListAccounts(t *testing.T) {
 	}
 
 	arg := ListAccountsParams{
-		Owner: lastAccount.Owner,
-		Limit: 5,
+		Owner:  lastAccount.Owner,
+		Limit:  5,
 		Offset: 0,
 	}
 

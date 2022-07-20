@@ -36,6 +36,15 @@ func newUserResponse(user db.User) userResponse {
 	}
 }
 
+// @Summary  creates a new user
+// @Accepts  json
+// @Produce  json
+// @Param    username  body      string  true  "Username"
+// @Param    email     body      string  true  "Email Address"
+// @Param    fullname  body      string  true  "Full Name"
+// @Param    password  body      string  true  "Password"
+// @Success  200       {object}  userResponse
+// @Router   /user [POST]
 func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
 
@@ -84,6 +93,13 @@ type loginUserResponse struct {
 	User        userResponse `json:"user"`
 }
 
+// @Summary  log in an existing user
+// @Accepts  json
+// @Produce  json
+// @Param    username  body      string  true  "Username"
+// @Param    password  body      string  true  "Password"
+// @Success  200       {object}  loginUserResponse
+// @Router   /user/login [POST]
 func (server *Server) loginUser(ctx *gin.Context) {
 	var req loginUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {

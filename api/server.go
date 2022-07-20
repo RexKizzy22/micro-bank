@@ -10,8 +10,9 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 
-	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "github.com/Rexkizzy22/simple-bank/docs"
 	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // serves HTTP requests for our banking services
@@ -48,9 +49,9 @@ func (server *Server) Routes() {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.POST("/users", server.createUser)
-	router.POST("/users/login", server.loginUser)
-	
+	router.POST("/user", server.createUser)
+	router.POST("/user/login", server.loginUser)
+
 	authRoutes := router.Group("/").Use(authMiddleware(server.token))
 
 	authRoutes.POST("/accounts", server.createAccount)
