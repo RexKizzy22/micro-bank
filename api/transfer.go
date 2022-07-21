@@ -12,22 +12,22 @@ import (
 )
 
 type transferRequest struct {
-	FromAccountID int64  `json:"from_account_id" binding:"required, min=1"`
-	ToAccountID   int64  `json:"to_account_id" binding:"required, min=1"`
-	Amount        int64  `json:"amount" binding:"required, gt=0"`
-	Currency      string `json:"currency" binding:"required, currency"`
+	FromAccountID int64  `json:"from_account_id" binding:"required,min=1"`
+	ToAccountID   int64  `json:"to_account_id" binding:"required,min=1"`
+	Amount        int64  `json:"amount" binding:"required,gt=0"`
+	Currency      string `json:"currency" binding:"required,currency"`
 }
 
 // @Summary   transfer money between accounts with same currency
 // @Accepts   json
 // @Produce   json
 // @Param     currency         body      string  true  "Account Currency"
-// @Param     amount           body      string  true  "Amount of Money"
-// @Param     from_account_id  body      string  true  "From Account ID"
-// @Param     to_account_id    body      string  true  "To Account ID"
+// @Param     amount           body      int     true  "Amount of Money"
+// @Param     from_account_id  body      int     true  "From Account ID"
+// @Param     to_account_id    body      int     true  "To Account ID"
 // @Success   200              {object}  db.TransferTxResult
 // @Security  ApiKeyAuth
-// @Router    /transfer [POST]
+// @Router    /transfers [POST]
 func (server *Server) createTransfer(ctx *gin.Context) {
 	var req transferRequest
 

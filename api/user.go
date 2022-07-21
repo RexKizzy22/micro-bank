@@ -12,10 +12,10 @@ import (
 )
 
 type createUserRequest struct {
-	Username string `json:"username" binding:"required, alphanum"`
-	Email    string `json:"email" binding:"required, email"`
+	Username string `json:"username" binding:"required,alphanum"`
+	Email    string `json:"email" binding:"required,email"`
 	FullName string `json:"full_name" binding:"required"`
-	Password string `json:"password" binding:"required, min=6"`
+	Password string `json:"password" binding:"required,min=6"`
 }
 
 type userResponse struct {
@@ -84,8 +84,8 @@ func (server *Server) createUser(ctx *gin.Context) {
 }
 
 type loginUserRequest struct {
-	Username string `json:"username" binding:"required, alphanum"`
-	Password string `json:"password" binding:"required, min=6"`
+	Username string `json:"username" binding:"required,alphanum"`
+	Password string `json:"password" binding:"required,min=6"`
 }
 
 type loginUserResponse struct {

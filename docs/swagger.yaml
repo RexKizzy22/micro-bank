@@ -133,7 +133,7 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: gets an existing account for a specified User ID
-  /transfer:
+  /transfers:
     post:
       parameters:
       - description: Account Currency
@@ -147,19 +147,19 @@ paths:
         name: amount
         required: true
         schema:
-          type: string
+          type: integer
       - description: From Account ID
         in: body
         name: from_account_id
         required: true
         schema:
-          type: string
+          type: integer
       - description: To Account ID
         in: body
         name: to_account_id
         required: true
         schema:
-          type: string
+          type: integer
       produces:
       - application/json
       responses:

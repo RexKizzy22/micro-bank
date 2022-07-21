@@ -1,13 +1,17 @@
 server: swag
 	swag fmt
 	go fmt ./...
-	go run main.go
+	gow run main.go
 
 swag: 
 	swag init
 
 postgres:
-	docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	# Connect container to localhost
+	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+
+	# Connect using a common container network
+	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
 createdb:
 	docker exec -it postgres14 createdb --username=postgres --owner=postgres simple-bank
@@ -19,20 +23,44 @@ querydb:
 	docker exec -it postgres14 psql -U postgres simple-bank
 
 migrateup:
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up
-	migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up
+	# Connect to the local database
+	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up
+
+	# Connect between the database container and the app container
+	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up
+
+	# Connect to the remote database on AWS
+	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up
 
 migrateup1:
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up 1
-	migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up 1
+	# Connect to the local database
+	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up 1
+
+	# Connect between the database container and the app container
+	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up 1
+
+	# Connect to the remote database on AWS
+	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up 1
 
 migratedown:
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down
-	migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down
+	# Connect to the local database
+	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose down
+
+	# Connect between the database container and the app container
+	#migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down
+
+	# Connect to the remote database on AWS
+	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down
 
 migratedown1:
+	# Connect to the local database
 	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down 1
-	migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down 1
+
+	# Connect between the database container and the app container
+	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down 1
+
+	# Connect to the remote database on AWS
+	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down 1
 
 sqlc:
 	sqlc generate

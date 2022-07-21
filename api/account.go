@@ -12,7 +12,7 @@ import (
 )
 
 type createAccountRequest struct {
-	Currency string `json:"currency" binding:"required, currency"`
+	Currency string `json:"currency" binding:"required,currency"`
 }
 
 // @Summary   creates a new account with a given currency
@@ -91,8 +91,8 @@ func (route *Server) getAccount(ctx *gin.Context) {
 }
 
 type listAccountRequest struct {
-	Page_ID   int32 `form:"page_id" binding:"required, min=1"`
-	Page_Size int32 `form:"page_size" binding:"required, min=5, max=10"`
+	Page_ID   int32 `form:"page_id" binding:"required,min=1"`
+	Page_Size int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
 // @Summary   lists all accounts for a specific User ID

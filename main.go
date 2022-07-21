@@ -22,7 +22,7 @@ func main() {
 
 	// programmatically setting general swagger info
 	docs.SwaggerInfo.Title = "Simple Bank API"
-	docs.SwaggerInfo.Description = "This is a production-grade api built with GO and GIN."
+	docs.SwaggerInfo.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
 	docs.SwaggerInfo.Version = "1.0.0"
 	docs.SwaggerInfo.Host = config.ServerAddress
 	docs.SwaggerInfo.BasePath = "/"
