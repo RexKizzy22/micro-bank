@@ -1,5 +1,6 @@
 #!bin/sh
 
+# Exit immediately if any command returns a non-zero exit code
 set -e
 
 echo "Running database migration..."

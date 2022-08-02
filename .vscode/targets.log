@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Wed Jul 20 17:34:42 2022
+# Make data base, printed on Wed Jul 27 01:42:42 2022
 
 # Variables
 
@@ -42,25 +42,27 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /usr/local/go/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+PATH = /Library/PostgreSQL/14/bin:/Users/user/.volta/bin:/Users/user/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/user/Library/Application Support/Coursier/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/user/Library/Application Support/Coursier/bin:/Users/user/go/bin/:/usr/local/smlnj/bin:/Library/PostgreSQL/14/bin:/Users/user/.volta/bin:/Users/user/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/user/Library/Application Support/Coursier/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/user/Library/Application Support/Coursier/bin:/Users/user/go/bin/:/usr/local/go/bin:/usr/local/go/bin/swag
 # environment
-GOPATH = /Users/user/go
-# environment
-LaunchInstanceID = 23628C98-AE42-477C-A8B9-408057DF5302
+GOPATH = /Users/user/code/golang
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.68b4XzIYEO/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.SlI0aXNqkN/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
+GOBIN = /Users/user/go/bin/
+# environment
 PWD = /Users/user/Desktop/dev/GO/simple-bank
+# environment
+DOTNET_ROOT = /usr/local/share/dotnet
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
-GOMODCACHE = /Users/user/go/pkg/mod
+GOMODCACHE = /Users/user/code/golang/pkg/mod
 # environment
 HOME = /Users/user
 # default
@@ -70,7 +72,9 @@ VSCODE_CODE_CACHE_PATH = /Users/user/Library/Application Support/Code/CachedData
 # environment
 LOGNAME = user
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+ZSH = /Users/user/.oh-my-zsh
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -83,6 +87,10 @@ MAKE = $(MAKE_COMMAND)
 MAKECMDGOALS := all
 # environment
 SHLVL = 1
+# environment
+VOLTA_HOME = /Users/user/.volta
+# environment
+JAVA_HOME = /Users/user/Library/Caches/Coursier/arc/https/github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u292-b10/OpenJDK8U-jdk_x64_mac_hotspot_8u292b10.tar.gz/jdk8u292-b10/Contents/Home
 # default
 MAKE_VERSION := 3.81
 # environment
@@ -125,8 +133,6 @@ MAKEFILES :=
 <F = $(notdir $<)
 # environment
 LC_ALL = C
-# environment
-SECURITYSESSIONID = 186a3
 # automatic
 ^F = $(notdir $^)
 # default
@@ -138,9 +144,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 387
+VSCODE_PID = 84496
 # variable set hash-table stats:
-# Load=64/1024=6%, Rehash=0, Collisions=2/88=2%
+# Load=67/1024=7%, Rehash=0, Collisions=2/91=2%
 
 # Pattern-specific Variable Values
 
@@ -148,9 +154,9 @@ VSCODE_PID = 387
 
 # Directories
 
-# . (device 16777220, inode 13830890): 23 files, no impossibilities.
+# . (device 16777220, inode 13830890): 24 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 24 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -164,7 +170,10 @@ postgres:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 10):
-	docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	# Connect container to localhost
+	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	# Connect using a common container network
+	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 	
 
 # Not a target:
@@ -181,7 +190,7 @@ migratedown1:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 52):
+#  commands to execute (from `Makefile', line 56):
 	# Connect to the local database
 	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down 1
 	# Connect between the database container and the app container
@@ -199,7 +208,7 @@ awsecrlogin:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 71):
+#  commands to execute (from `Makefile', line 75):
 	aws ecr get-login-password | docker login --username AWS --password-stdin 335858042864.dkr.ecr.us-west-2.amazonaws.com
 	
 
@@ -208,7 +217,7 @@ sqlc:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 62):
+#  commands to execute (from `Makefile', line 66):
 	sqlc generate
 	
 
@@ -221,7 +230,7 @@ sqlc:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-20 17:25:42
+#  Last modified 2022-07-22 00:04:07
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -243,7 +252,7 @@ test:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 65):
+#  commands to execute (from `Makefile', line 69):
 	go test -v -cover ./...
 	
 
@@ -252,7 +261,10 @@ createdb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 13):
+ 
+make: *** No rule to make target `all'.  Stop.
+
+#  commands to execute (from `Makefile', line 17):
 	docker exec -it postgres14 createdb --username=postgres --owner=postgres simple-bank
 	
 
@@ -267,7 +279,7 @@ dropdb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 16):
+#  commands to execute (from `Makefile', line 20):
 	docker exec -it postgres14 dropdb --username=postgres simple-bank
 	
 
@@ -275,7 +287,7 @@ kubeconfig:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 77):
+#  commands to execute (from `Makefile', line 81):
 	aws eks update-kubeconfig --name simple-bank --region us-west-2
 	
 
@@ -284,14 +296,11 @@ migrateup:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 22):
+#  commands to execute (from `Makefile', line 26):
 	# Connect to the local database
 	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up
 	# Connect between the database container and the app container
 	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up
- 
-make: *** No rule to make target `all'.  Stop.
-
 	# Connect to the remote database on AWS
 	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up
 	
@@ -310,7 +319,7 @@ awssecrets:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 74):
+#  commands to execute (from `Makefile', line 78):
 	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
 	
 
@@ -319,7 +328,7 @@ migrateup1:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 32):
+#  commands to execute (from `Makefile', line 36):
 	# Connect to the local database
 	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up 1
 	# Connect between the database container and the app container
@@ -333,11 +342,11 @@ migratedown:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 42):
+#  commands to execute (from `Makefile', line 46):
 	# Connect to the local database
 	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose down
 	# Connect between the database container and the app container
-	#migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down
+	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down
 	# Connect to the remote database on AWS
 	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down
 	
@@ -347,7 +356,7 @@ querydb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 19):
+#  commands to execute (from `Makefile', line 23):
 	docker exec -it postgres14 psql -U postgres simple-bank
 	
 
@@ -355,7 +364,7 @@ mock:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 68):
+#  commands to execute (from `Makefile', line 72):
 	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/simple-bank/db/sqlc Store
 	
 
@@ -372,6 +381,6 @@ mock:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Jul 20 17:34:42 2022
+# Finished Make data base on Wed Jul 27 01:42:42 2022
 
  

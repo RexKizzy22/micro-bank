@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-bank-api-deployment
+  labels:
+    app: simple-bank-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: imple-bank-api
+  template:
+    metadata:
+      labels:
+        app: imple-bank-api
+    spec:
+      containers:
+      - name: simple-bank-api
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80

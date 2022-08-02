@@ -7,9 +7,7 @@ WORKDIR /app
 
 COPY go.mod go.sum ./
 
-# RUN go mod download
-
-RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz 
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz
 
 COPY . .
 
@@ -18,16 +16,20 @@ RUN go build -o main main.go
 # Run Stage 
 FROM alpine:3.16
 
+RUN addgroup app && adduser -S -G app app
+
 WORKDIR /app
 
 COPY --from=builder /app/main .
 
-COPY --from=builder migrate ./migrate
+COPY --from=builder /app/migrate.linux-amd64 ./migrate
 
-COPY app.env .
+COPY app.env start.sh wait-for.sh ./
 
 COPY db/migration ./migration
 
 EXPOSE 8080
 
-CMD [ "/app/main" ]
+CMD [ "/main" ]
+
+ENTRYPOINT [ "/start.sh" ]
