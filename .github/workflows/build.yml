@@ -1,13 +1,13 @@
-name: Build and deploy image to AWS ECR
+name: Build and push image to AWS ECR
 
 on:
   workflow_run:
     workflows: ["Run unit tests"]
-    branches: [main]
+    branches: [ "main", "aws-eks-cluster" ]
     types: 
       - completed
   push:
-    branches: [ "main" ]
+    branches: [ "main", "aws-eks-cluster" ]
 
 jobs:
 

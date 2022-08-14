@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: imple-bank-api
+      app: simple-bank-api
   template:
     metadata:
       labels:
-        app: imple-bank-api
+        app: simple-bank-api
     spec:
       containers:
       - name: simple-bank-api
