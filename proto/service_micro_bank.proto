@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "rpc_create_user.proto";
+import "rpc_login_user.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/Rexkizzy22/micro-bank/pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Micro Bank GRPC API";
+    description: "A production-grade Go API that provides money transfer services between accounts of registered users";
+    version: "1.0";
+    contact: {
+      name: "Kizito";
+      url: "https://github.com/Rexkizzy22/micro-bank/";
+      email: "kizitoinegbenose@gmail.com";
+    };
+  };
+};
+
+service MicroBank {
+   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+      option (google.api.http) = {
+         post: "/v1/create_user",
+         body: "*"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+         description: "Use this to create a new user";
+         summary: "Create a new user";
+      };
+   }
+   rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+      option (google.api.http) = {
+         post: "/v1/login_user",
+         body: "*"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+         description: "Use this to log in an existing user";
+         summary: "Log new user";
+      };
+   }
+}

@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/util"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/lib/pq"
 )
 
@@ -36,22 +37,21 @@ func newUserResponse(user db.User) userResponse {
 	}
 }
 
-// @Summary  creates a new user
-// @Accepts  json
-// @Produce  json
-// @Param    username  body      string  true  "Username"
-// @Param    email     body      string  true  "Email Address"
-// @Param    fullname  body      string  true  "Full Name"
-// @Param    password  body      string  true  "Password"
-// @Success  200       {object}  userResponse
-// @Router   /user [POST]
+// @Summary creates a new user
+// @Accepts json
+// @Produce json
+// @Param   username body     string true "Username"
+// @Param   email    body     string true "Email Address"
+// @Param   fullname body     string true "Full Name"
+// @Param   password body     string true "Password"
+// @Success 200      {object} userResponse
+// @Router  /user [POST]
 func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
-
 	hashPassword, err := util.HashPassword(req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -89,17 +89,21 @@ type loginUserRequest struct {
 }
 
 type loginUserResponse struct {
-	AccessToken string       `json:"access_token"`
-	User        userResponse `json:"user"`
+	ID                    uuid.UUID    `json:"session_id"`
+	AccessToken           string       `json:"access_token"`
+	AccessTokenExpiresAt  time.Time    `json:"access_token_expires_at"`
+	RefreshToken          string       `json:"refresh_token"`
+	RefreshTokenExpiresAt time.Time    `json:"refresh_token_expires_at"`
+	User                  userResponse `json:"user"`
 }
 
-// @Summary  log in an existing user
-// @Accepts  json
-// @Produce  json
-// @Param    username  body      string  true  "Username"
-// @Param    password  body      string  true  "Password"
-// @Success  200       {object}  loginUserResponse
-// @Router   /user/login [POST]
+// @Summary log in an existing user
+// @Accepts json
+// @Produce json
+// @Param   username body     string true "Username"
+// @Param   password body     string true "Password"
+// @Success 200      {object} loginUserResponse
+// @Router  /user/login [POST]
 func (server *Server) loginUser(ctx *gin.Context) {
 	var req loginUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -123,18 +127,45 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := server.token.CreateToken(
+	accessToken, accessPayload, err := server.token.CreateToken(
 		user.Username,
-		server.config.TokenDuration,
+		server.config.AccessTokenDuration,
 	)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
+	refreshToken, refreshPayload, err := server.token.CreateToken(
+		user.Username,
+		server.config.RefreshTokenDuration,
+	)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
+		ID:           refreshPayload.ID,
+		Username:     user.Username,
+		IsBlocked:    false,
+		RefreshToken: refreshToken,
+		UserAgent:    ctx.Request.UserAgent(),
+		ClientIP:     ctx.ClientIP(),
+		ExpiresAt:    refreshPayload.ExpiredAt,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	resp := loginUserResponse{
-		AccessToken: accessToken,
-		User:        newUserResponse(user),
+		ID:                    session.ID,
+		AccessToken:           accessToken,
+		AccessTokenExpiresAt:  accessPayload.ExpiredAt,
+		RefreshToken:          refreshToken,
+		RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
+		User:                  newUserResponse(user),
 	}
 	ctx.JSON(http.StatusOK, resp)
 }

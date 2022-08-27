@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/Rexkizzy22/simple-bank/util"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/go-playground/validator/v10"
 )
 

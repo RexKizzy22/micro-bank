@@ -9,11 +9,13 @@ import (
 // stores all configurations of the application
 // values are read by viper from the config file or environment variables
 type Config struct {
-	DBSource          string        `mapstructure:"DB_SOURCE"`
-	DBDriver          string        `mapstructure:"DB_DRIVER"`
-	ServerAddress     string        `mapstructure:"SERVER_ADDRESS"`
-	TokenSymmetricKey string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
-	TokenDuration     time.Duration `mapstructure:"TOKEN_DURATION"`
+	DBSource             string        `mapstructure:"DB_SOURCE"`
+	DBDriver             string        `mapstructure:"DB_DRIVER"`
+	HTTP_ServerAddress   string        `mapstructure:"HTTP_SERVER_ADDRESS"`
+	GRPC_ServerAddress   string        `mapstructure:"GRPC_SERVER_ADDRESS"`
+	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

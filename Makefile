@@ -1,9 +1,13 @@
+LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/micro-bank?sslmode=disable
+DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres14:5432/micro-bank?sslmode=disable
+AWS_RDS_DB_URL=postgresql://postgres:Kizito22@micro-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank
+
 server: swag
 	swag fmt
 	go fmt ./...
 	gow run main.go
 
-swag: docs
+swag:
 	swag init
 
 randkey:
@@ -11,59 +15,59 @@ randkey:
 
 postgres:
 	# Connect container to localhost
-	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
 	# Connect using a common container network
-	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=SimpleBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
 createdb:
-	docker exec -it postgres14 createdb --username=postgres --owner=postgres simple-bank
+	docker exec -it postgres14 createdb --username=postgres --owner=postgres micro-bank
 
 dropdb:
-	docker exec -it postgres14 dropdb --username=postgres simple-bank
+	docker exec -it postgres14 dropdb --username=postgres micro-bank
 
 querydb:
-	docker exec -it postgres14 psql -U postgres simple-bank
+	docker exec -it postgres14 psql -U postgres micro-bank
 
 migrateup:
 	# Connect to the local database
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up
 
 	# Connect between the database container and the app container
-	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up
+	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
 
 	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up
+	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up
 
 migrateup1:
 	# Connect to the local database
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose up 1
+	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up 1
 
 	# Connect between the database container and the app container
-	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose up 1
+	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
 
 	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose up 1
+	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up 1
 
 migratedown:
 	# Connect to the local database
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@localhost:5432/simple-bank?sslmode=disable" -verbose down
+	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose down
 
 	# Connect between the database container and the app container
-	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down
+	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
 
 	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down
+	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down
 
 migratedown1:
 	# Connect to the local database
-	migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down 1
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
 
 	# Connect between the database container and the app container
-	# migrate -path db/migration -database "postgresql://postgres:SimpleBank@postgres14:5432/simple-bank?sslmode=disable" -verbose down 1
+	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
 
 	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "postgresql://postgres:Kizito22@simple-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank" -verbose down 1
+	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down 1
 
 # Generate models from sql queries and as well generate repositories to communicate with the database
 sqlc:
@@ -75,7 +79,7 @@ test:
 
 # Generate database mock utilities for testing
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/simple-bank/db/sqlc Store
+	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container
 awsecrlogin:
@@ -87,10 +91,29 @@ awssecrets:
 
 # Configure kubeconfig file to use AWS context
 kubeconfig:
-	aws eks update-kubeconfig --name simple-bank --region us-west-2
+	aws eks update-kubeconfig --name micro-bank --region us-west-2
 
 # Select a particular context for kubectl to use when there are multiple contexts registered
 k8scontext:
-	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/simple-bank
+	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/micro-bank
 
-.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 sqlc test server swag awssecrets
+# Compile the GRPC interface definition language and serve assets from a statik server
+proto:
+	rm -f pb/*.go
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+    --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+	--grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
+    --openapiv2_out=gapi/swagger --openapiv2_opt=allow_merge=true,merge_file_name=microbank,output_format=yaml \
+	proto/*.proto
+	statik -src=./gapi/swagger -dest=./gapi
+
+evans:
+	evans --host localhost --port 9090 -r repl
+
+db_doc:
+	dbdocs build dbdoc/microbank.dbml
+
+db_schema:
+	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
+
+.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 sqlc test server swag awssecrets proto evans db_doc db_schema

@@ -5,16 +5,16 @@ import (
 	"testing"
 	"time"
 
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/util"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
 
 func newTestServer(t *testing.T, store db.Store) *Server {
 	config := util.Config{
-		TokenSymmetricKey: util.RandomString(32),
-		TokenDuration:     time.Minute,
+		TokenSymmetricKey:   util.RandomString(32),
+		AccessTokenDuration: time.Minute,
 	}
 
 	server, err := NewServer(config, store)

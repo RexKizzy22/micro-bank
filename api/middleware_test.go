@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Rexkizzy22/simple-bank/token"
+	"github.com/Rexkizzy22/micro-bank/token"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
@@ -20,8 +20,9 @@ func addAuthorization(
 	username string,
 	duration time.Duration,
 ) {
-	token, err := tokenMaker.CreateToken(username, duration)
+	token, payload, err := tokenMaker.CreateToken(username, duration)
 	require.NoError(t, err)
+	require.NotEmpty(t, payload)
 
 	authorizationHeader := fmt.Sprintf("%s %s", authorizationType, token)
 	request.Header.Set("Authorization", authorizationHeader)

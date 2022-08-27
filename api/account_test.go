@@ -5,16 +5,16 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	mockdb "github.com/Rexkizzy22/simple-bank/db/mock"
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/token"
-	"github.com/Rexkizzy22/simple-bank/util"
+	mockdb "github.com/Rexkizzy22/micro-bank/db/mock"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/token"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
@@ -162,7 +162,7 @@ func randomAccount(owner string) db.Account {
 }
 
 func requireBodyMatchAccount(t *testing.T, body *bytes.Buffer, account db.Account) {
-	data, err := ioutil.ReadAll(body)
+	data, err := io.ReadAll(body)
 	require.NoError(t, err)
 
 	var gotAccount db.Account

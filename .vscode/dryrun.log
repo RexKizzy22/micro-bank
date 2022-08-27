@@ -1,8 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/user/Desktop/dev/GO/simple-bank'
-swag init
-swag fmt
-go fmt ./...
-gow run main.go
-make: Leaving directory `/Users/user/Desktop/dev/GO/simple-bank'
+make: Entering directory `/Users/emmanuel/Desktop/home/golang/micro-bank'
+make: Leaving directory `/Users/emmanuel/Desktop/home/golang/micro-bank'
  
+make: *** No rule to make target `api/swagger', needed by `swag'.
+
