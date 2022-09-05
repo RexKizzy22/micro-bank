@@ -11,6 +11,7 @@ import (
 type Config struct {
 	DBSource             string        `mapstructure:"DB_SOURCE"`
 	DBDriver             string        `mapstructure:"DB_DRIVER"`
+	MigrationURL             string        `mapstructure:"MIGRATION_URL"`
 	HTTP_ServerAddress   string        `mapstructure:"HTTP_SERVER_ADDRESS"`
 	GRPC_ServerAddress   string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`

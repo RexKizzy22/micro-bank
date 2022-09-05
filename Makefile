@@ -1,6 +1,6 @@
 LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/micro-bank?sslmode=disable
 DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres14:5432/micro-bank?sslmode=disable
-AWS_RDS_DB_URL=postgresql://postgres:Kizito22@micro-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank
+AWS_RDS_DB_URL=postgresql://postgres:Kizito22@micro-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
 
 server: swag
 	swag fmt
@@ -13,12 +13,15 @@ swag:
 randkey:
 	openssl rand -hex 64 | head -c 32
 
-postgres:
+postgres-dockcp:
 	# Connect container to localhost
-	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	docker run --name=postgres14 -p 5432:5432 \
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
+postgres-dock:
 	# Connect using a common container network
-	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	# docker run --name=postgres14 --network bank-network -p 5432:5432 \
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
 createdb:
 	docker exec -it postgres14 createdb --username=postgres --owner=postgres micro-bank
@@ -29,45 +32,44 @@ dropdb:
 querydb:
 	docker exec -it postgres14 psql -U postgres micro-bank
 
+# Connect to the local database
 migrateup:
-	# Connect to the local database
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up
 
-	# Connect between the database container and the app container
-	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
-
-	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up
-
 migrateup1:
-	# Connect to the local database
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up 1
 
-	# Connect between the database container and the app container
-	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
-
-	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up 1
-
 migratedown:
-	# Connect to the local database
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose down
 
-	# Connect between the database container and the app container
-	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
-
-	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down
-
 migratedown1:
-	# Connect to the local database
 	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
 
-	# Connect between the database container and the app container
-	# migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
+# Connect between the database container and the app container
+migrateup-dock:
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
 
-	# Connect to the remote database on AWS RDS
-	# migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down 1
+migrateup1-dock:
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
+
+migratedown-dock:
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
+
+migratedown1-dock:
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
+
+# Connect to the remote database on AWS RDS
+migrateup-remote:
+	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up
+
+migrateup1-remote:
+	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up 1
+
+migratedown-remote:
+	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down
+
+migratedown1-remote:
+	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down 1
 
 # Generate models from sql queries and as well generate repositories to communicate with the database
 sqlc:
@@ -87,7 +89,8 @@ awsecrlogin:
 
 # Retrieve secrets from AWS Secret Manager and save them to app.env
 awssecrets:
-	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
+	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString \ 
+		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
 
 # Configure kubeconfig file to use AWS context
 kubeconfig:
