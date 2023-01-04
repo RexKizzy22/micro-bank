@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/token"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/token"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,16 +18,16 @@ type transferRequest struct {
 	Currency      string `json:"currency" binding:"required,currency"`
 }
 
-// @Summary   transfer money between accounts with same currency
-// @Accepts   json
-// @Produce   json
-// @Param     currency         body      string  true  "Account Currency"
-// @Param     amount           body      int     true  "Amount of Money"
-// @Param     from_account_id  body      int     true  "From Account ID"
-// @Param     to_account_id    body      int     true  "To Account ID"
-// @Success   200              {object}  db.TransferTxResult
-// @Security  ApiKeyAuth
-// @Router    /transfers [POST]
+// @Summary  transfer money between accounts with same currency
+// @Accepts  json
+// @Produce  json
+// @Param    currency        body     string true "Account Currency"
+// @Param    amount          body     int    true "Amount of Money"
+// @Param    from_account_id body     int    true "From Account ID"
+// @Param    to_account_id   body     int    true "To Account ID"
+// @Success  200             {object} db.TransferTxResult
+// @Security ApiKeyAuth
+// @Router   /transfers [POST]
 func (server *Server) createTransfer(ctx *gin.Context) {
 	var req transferRequest
 

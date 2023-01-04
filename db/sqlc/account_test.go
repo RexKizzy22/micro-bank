@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Rexkizzy22/simple-bank/util"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/stretchr/testify/require"
 )
 
@@ -15,7 +15,7 @@ func createRandomAccount(t *testing.T) Account {
 
 	arg := CreateAccountParams{
 		Owner:    user.Username,
-		Balance:  util.RandomMoney(),
+		Balance:  int64(500), //util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 

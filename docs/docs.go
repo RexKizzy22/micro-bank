@@ -271,6 +271,18 @@ const docTemplate = `{
                 "access_token": {
                     "type": "string"
                 },
+                "access_token_expires_at": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "refresh_token_expires_at": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "string"
+                },
                 "user": {
                     "$ref": "#/definitions/api.userResponse"
                 }

@@ -1,43 +1,43 @@
-name: Build and deploy image to AWS ECR
+# name: Build and deploy image to AWS ECR
 
-on:
-  workflow_run:
-    workflows: ["Run unit tests"]
-    branches: [main]
-    types: 
-      - completed
-  push:
-    branches: [ "main" ]
+# on:
+#   workflow_run:
+#     workflows: ["Run unit tests"]
+#     branches: [main]
+#     types: 
+#       - completed
+#   push:
+#     branches: [ "main" ]
 
-jobs:
+# jobs:
 
-  build:
-    runs-on: ubuntu-latest
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-    - name: Check out code on github repository
-      uses: actions/checkout@v3
+#     steps:
+#     - name: Check out code on github repository
+#       uses: actions/checkout@v3
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
-        aws-region: us-west-2
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
+#         aws-region: us-west-2
 
-    - name: Login to Amazon ECR Private
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+#     - name: Login to Amazon ECR Private
+#       id: login-ecr
+#       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Load secrets from AWS Secret Manager and save to app.env 
-      uses: aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
+#     - name: Load secrets from AWS Secret Manager and save to app.env 
+#       uses: aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 
-    - name: Build, tag, and push docker image to Amazon ECR
-      env:
-        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        REPOSITORY: simplebank
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+#     - name: Build, tag, and push docker image to Amazon ECR
+#       env:
+#         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#         REPOSITORY: microbank
+#         IMAGE_TAG: ${{ github.sha }}
+#       run: |
+#         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+#         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

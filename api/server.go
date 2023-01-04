@@ -3,14 +3,14 @@ package api
 import (
 	"fmt"
 
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/token"
-	"github.com/Rexkizzy22/simple-bank/util"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/token"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 
-	_ "github.com/Rexkizzy22/simple-bank/docs"
+	_ "github.com/Rexkizzy22/micro-bank/docs"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -51,6 +51,7 @@ func (server *Server) Routes() {
 
 	router.POST("/user", server.createUser)
 	router.POST("/user/login", server.loginUser)
+	router.POST("/tokens/renew_access", server.renewAccessToken)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.token))
 

@@ -11,15 +11,19 @@ import (
 	"reflect"
 	"testing"
 
-	mockdb "github.com/Rexkizzy22/simple-bank/db/mock"
-	db "github.com/Rexkizzy22/simple-bank/db/sqlc"
-	"github.com/Rexkizzy22/simple-bank/util"
+	mockdb "github.com/Rexkizzy22/micro-bank/db/mock"
+	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/gin-gonic/gin"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
 
+// create custom matcher to test for hashed passwords since a different one is created for
+// every time a password is hashed.
+
+// eqCreateUserMatcher implements the Matcher interface
 type eqCreateUserMatcher struct {
 	arg      db.CreateUserParams
 	password string
@@ -82,7 +86,9 @@ func TestCreateUserAPI(t *testing.T) {
 				requireBodyMatchUser(t, recorder.Body, user)
 			},
 		},
+
 		// TODO: complete other tests
+		
 		// {
 		// 	name:      "DuplicateUser",
 		// 	body: user.Username,
