@@ -139,4 +139,4 @@ db_doc:
 db_schema:
 	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
 
-.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 sqlc test server swag awssecrets proto evans db_doc db_schema
+.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 migrateup-dock migrateup1-dock migratedown-dock migratedown1-dock migrateup-remote migrateup1-remote migratedown-remote migratedown1-remote sqlc test server swag awssecrets proto evans db_doc db_schema
