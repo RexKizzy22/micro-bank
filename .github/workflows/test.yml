@@ -45,7 +45,7 @@ jobs:
         which migrate
 
     - name: Run Migrations
-      run: make migrateup-dock
+      run: make migrateup
 
     # - name: Build
     #   run: go build -v ./...
