@@ -1,4 +1,4 @@
-LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5430/microbank?sslmode=disable
+LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/microbank?sslmode=disable
 DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres14:5432/microbank?sslmode=disable
 AWS_RDS_DB_URL=postgresql://postgres:Kizito22@microbank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
 
