@@ -1,25 +1,25 @@
-name: MicroBank Database Documentation
+# name: MicroBank Database Documentation
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - name: Install dbdocs
-        run: sudo npm install -g dbdocs
+#       - name: Install dbdocs
+#         run: sudo npm install -g dbdocs
 
-      - name: Check dbdocs
-        run: dbdocs
+#       - name: Check dbdocs
+#         run: dbdocs
 
-      - name: Update MicroBank dbdocs
-        env:
-          DBDOCS_TOKEN: ${{DBDOCS_TOKEN}}
-        run: dbdocs build dbdoc/microbank.dbml
+#       - name: Update MicroBank dbdocs
+#         env:
+#           DBDOCS_TOKEN: ${{DBDOCS_TOKEN}}
+#         run: dbdocs build dbdoc/microbank.dbml
