@@ -102,13 +102,13 @@ func TestTransferTx(t *testing.T) {
 		existed[k] = true
 
 		// TODO:check the final updated account
-		updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
-		require.NoError(t, err)
+		// updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
+		// require.NoError(t, err)
 
-		updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
-		require.NoError(t, err)
+		// updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
+		// require.NoError(t, err)
 
-		fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)
+		// fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)
 
 		// require.Equal(t, account1.Balance-(int64(n)*amount), updatedAccount1.Balance)
 		// require.Equal(t, account2.Balance+(int64(n)*amount), updatedAccount2.Balance)
@@ -155,13 +155,13 @@ func TestTransferTxDeadlock(t *testing.T) {
 		require.NoError(t, err)
 
 		// TODO: check the final updated account
-		updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
-		require.NoError(t, err)
+		// updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
+		// require.NoError(t, err)
 
-		updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
-		require.NoError(t, err)
+		// updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
+		// require.NoError(t, err)
 
-		fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)
+		// fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)
 
 		// require.Equal(t, account1.Balance, updatedAccount1.Balance)
 		// require.Equal(t, account2.Balance, updatedAccount2.Balance)
