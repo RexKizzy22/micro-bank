@@ -1,36 +1,53 @@
-LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/micro-bank?sslmode=disable
-DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres14:5432/micro-bank?sslmode=disable
-AWS_RDS_DB_URL=postgresql://postgres:Kizito22@micro-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
+LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5430/microbank?sslmode=disable
+DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres14:5432/microbank?sslmode=disable
+AWS_RDS_DB_URL=postgresql://postgres:Kizito22@microbank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
 
+# start local server
 server: swag
 	swag fmt
 	go fmt ./...
 	gow run main.go
 
+# create a migration file
+migration:
+	migrate create -dir db/migration -ext sql -seq <filename>
+
+# generate REST API docs from the available services' docstrings
 swag:
 	swag init
 
 randkey:
 	openssl rand -hex 64 | head -c 32
 
-postgres-dockcp:
-	# Connect container to localhost
-	docker run --name=postgres14 -p 5432:5432 \
+# run postgres container using postgres official image
+postgres:
+	docker run --name=postgres14 -p 5430:5432 \
 		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
+# stop running container instance of the postgres image
+stop-postgres:
+	docker stop postgres14
+
+# remove stopped container instance of the postgres image
+rm-postgres:
+	docker rm postgres14
+
+# Connect postgres container to MicroBank server using a common container network
 postgres-dock:
-	# Connect using a common container network
 	# docker run --name=postgres14 --network bank-network -p 5432:5432 \
 		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 
+# create a new database in postgres container
 createdb:
-	docker exec -it postgres14 createdb --username=postgres --owner=postgres micro-bank
+	docker exec -it postgres14 createdb --username=postgres --owner=postgres microbank
 
+# delete the database in postgres container
 dropdb:
-	docker exec -it postgres14 dropdb --username=postgres micro-bank
+	docker exec -it postgres14 dropdb --username=postgres microbank
 
+# run database queries in postgres container
 querydb:
-	docker exec -it postgres14 psql -U postgres micro-bank
+	docker exec -it postgres14 psql -U postgres microbank
 
 # Connect to the local database
 migrateup:
@@ -75,13 +92,13 @@ migratedown1-remote:
 sqlc:
 	sqlc generate
 
-# Run all test and output coverage information
+# Run all test, output verbose logs and output coverage information
 test:
 	go test -v -cover ./...
 
 # Generate database mock utilities for testing
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
+	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/microbank/db/sqlc Store
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container
 awsecrlogin:
@@ -94,11 +111,11 @@ awssecrets:
 
 # Configure kubeconfig file to use AWS context
 kubeconfig:
-	aws eks update-kubeconfig --name micro-bank --region us-west-2
+	aws eks update-kubeconfig --name microbank --region us-west-2
 
 # Select a particular context for kubectl to use when there are multiple contexts registered
 k8scontext:
-	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/micro-bank
+	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/microbank
 
 # Compile the GRPC interface definition language and serve assets from a statik server
 proto:
@@ -110,12 +127,15 @@ proto:
 	proto/*.proto
 	statik -src=./gapi/swagger -dest=./gapi
 
+# run GRPC calls using Evans client
 evans:
 	evans --host localhost --port 9090 -r repl
 
+# generate database documentation using dbdiagram.io CLI
 db_doc:
 	dbdocs build dbdoc/microbank.dbml
 
+# generate database schema from schema design tool by dbdiagram.io
 db_schema:
 	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
 

@@ -11,7 +11,7 @@ import (
 type Config struct {
 	DBSource             string        `mapstructure:"DB_SOURCE"`
 	DBDriver             string        `mapstructure:"DB_DRIVER"`
-	MigrationURL             string        `mapstructure:"MIGRATION_URL"`
+	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	HTTP_ServerAddress   string        `mapstructure:"HTTP_SERVER_ADDRESS"`
 	GRPC_ServerAddress   string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
@@ -24,6 +24,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
 
+	// makes env variables provided in the terminal have more priority than those in .env file
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()

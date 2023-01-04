@@ -20,6 +20,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// create custom matcher to test for hashed passwords since a different one is created for
+// every time a password is hashed.
+
+// eqCreateUserMatcher implements the Matcher interface
 type eqCreateUserMatcher struct {
 	arg      db.CreateUserParams
 	password string
@@ -82,7 +86,9 @@ func TestCreateUserAPI(t *testing.T) {
 				requireBodyMatchUser(t, recorder.Body, user)
 			},
 		},
+
 		// TODO: complete other tests
+		
 		// {
 		// 	name:      "DuplicateUser",
 		// 	body: user.Username,

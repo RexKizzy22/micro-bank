@@ -12,6 +12,13 @@ SELECT * FROM accounts
 WHERE id = $1
 LIMIT 1;
 
+-- FOR UPDATE make read operations lock in a transaction 
+-- so that other read operations get the updated values
+
+-- FOR NO KEY UPDATE communicates to the database engine that
+-- an exclusive lock should not be acquired by foreign key transactions
+-- since the foreign key is not updated in the relevant queries
+
 -- name: GetAccountForUpdate :one
 SELECT * FROM accounts
 WHERE id = $1

@@ -28,3 +28,6 @@ func TestMain(m *testing.M) {
 
 	os.Exit(m.Run())
 }
+
+// TODO: Write tests for entry.sql.go queries
+// TODO: Write tests for transfer.sql.go queries

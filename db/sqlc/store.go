@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// provides all the endpoints for this application
 type Store interface {
 	Querier
 	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
@@ -59,6 +60,7 @@ func (s *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	return tx.Commit()
 }
 
+// TODO: write a generic version of TransferTx
 // performs money transfer from one account to another
 // creates a transfer record, adds account entries and updates accounts' balance in a single transaction
 func (s *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
@@ -92,10 +94,11 @@ func (s *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (Transf
 			return err
 		}
 
-		if arg.FromAccountID > arg.ToAccountID {
-			result.FromAccount, result.ToAccount, err = addMoney(ctx, q, arg.FromAccountID, -arg.Amount, result.Transfer.ToAccountID, arg.Amount)
+		// Avoid deadlock by performing all updates to one account first before the other
+		if arg.FromAccountID < arg.ToAccountID {
+			result.FromAccount, result.ToAccount, _ = addMoney(ctx, q, arg.FromAccountID, -arg.Amount, arg.ToAccountID, arg.Amount)
 		} else {
-			result.ToAccount, result.FromAccount, err = addMoney(ctx, q, arg.ToAccountID, arg.Amount, result.Transfer.FromAccountID, -arg.Amount)
+			result.ToAccount, result.FromAccount, _ = addMoney(ctx, q, arg.ToAccountID, arg.Amount, arg.FromAccountID, -arg.Amount)
 		}
 
 		return nil

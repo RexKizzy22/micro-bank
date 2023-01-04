@@ -15,7 +15,7 @@ func createRandomAccount(t *testing.T) Account {
 
 	arg := CreateAccountParams{
 		Owner:    user.Username,
-		Balance:  util.RandomMoney(),
+		Balance:  int64(500), //util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 

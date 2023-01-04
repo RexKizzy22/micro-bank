@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Sun Aug 28 08:55:38 2022
+# Make data base, printed on Mon Jan  2 12:16:00 2023
 
 # Variables
 
@@ -30,7 +30,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-gb","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/bin/make
 # makefile (from `Makefile', line 3)
-AWS_RDS_DB_URL = postgresql://postgres:Kizito22@micro-bank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/simple_bank
+AWS_RDS_DB_URL = postgresql://postgres:Kizito22@microbank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # environment
@@ -44,19 +44,19 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/emmanuel/.bun/bin:/Library/PostgreSQL/14/bin:/Users/emmanuel/.volta/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/usr/local/smlnj/bin:/Library/PostgreSQL/14/bin:/Users/emmanuel/.volta/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/emmanuel/go/bin/:/usr/local/go/bin:/usr/local/go/bin/swag
+PATH = /Users/emmanuel/Library/pnpm:/Users/emmanuel/.amplify/bin:/Users/emmanuel/.bun/bin:/Library/PostgreSQL/14/bin:/Users/emmanuel/.volta/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/usr/local/smlnj/bin:/Library/PostgreSQL/14/bin:/Users/emmanuel/.volta/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/emmanuel/go/bin/:/usr/local/go/bin:/usr/local/go/bin/swag
+# environment
+PNPM_HOME = /Users/emmanuel/Library/pnpm
 # environment
 GOPATH = /Users/emmanuel/code/golang
-# environment
-LaunchInstanceID = 59EAB121-2C1C-486D-AD49-8EDF348BBDE9
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # makefile (from `Makefile', line 2)
-DOCKER_DB_URL = postgresql://postgres:MicroBank@postgres14:5432/micro-bank?sslmode=disable
+DOCKER_DB_URL = postgresql://postgres:MicroBank@postgres14:5432/microbank?sslmode=disable
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.nJuCnPcJIV/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.8qKVBBMiig/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -76,9 +76,9 @@ GOMODCACHE = /Users/emmanuel/code/golang/pkg/mod
 # environment
 HOME = /Users/emmanuel
 # default
-MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/e4503b30fc78200f846c62cf8091b76ff5547662
+VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/e8a3071ea4344d9d48ef8a4df2c097372b0c5161
 # environment
 LOGNAME = emmanuel
 # environment
@@ -106,7 +106,7 @@ USER = emmanuel
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # default
-MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
 # default
 .VARIABLES := 
 # environment
@@ -114,7 +114,7 @@ TMPDIR = /var/folders/ww/0cclvqc57bl5whyqmc68h5440000gp/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.70.2-main.sock
+VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.74.2-main.sock
 # environment
 MallocNanoZone = 0
 # environment
@@ -126,7 +126,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.3035814.3035820
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.15897314.15897320
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -146,9 +146,7 @@ MAKEFILES :=
 # environment
 LC_ALL = C
 # makefile (from `Makefile', line 1)
-LOCAL_DB_URL = postgresql://postgres:MicroBank@localhost:5432/micro-bank?sslmode=disable
-# environment
-SECURITYSESSIONID = 186b8
+LOCAL_DB_URL = postgresql://postgres:MicroBank@localhost:5430/microbank?sslmode=disable
 # automatic
 ^F = $(notdir $^)
 # default
@@ -158,9 +156,9 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 623
+VSCODE_PID = 6264
 # variable set hash-table stats:
-# Load=74/1024=7%, Rehash=0, Collisions=2/97=2%
+# Load=73/1024=7%, Rehash=0, Collisions=2/96=2%
 
 # Pattern-specific Variable Values
 
@@ -168,9 +166,9 @@ VSCODE_PID = 623
 
 # Directories
 
-# . (device 16777233, inode 1095673): 32 files, no impossibilities.
+# . (device 16777231, inode 1095673): 33 files, no impossibilities.
 
-# 32 files, no impossibilities in 1 directories.
+# 33 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -183,12 +181,16 @@ postgres:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+#  commands to execute (from `Makefile', line 24):
+	docker run --name=postgres14 -p 5430:5432 \
+	-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	
 
 migratedown-remote:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 67):
+#  commands to execute (from `Makefile', line 78):
 	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down
 	
 
@@ -196,16 +198,8 @@ migrateup1-remote:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 64):
+#  commands to execute (from `Makefile', line 75):
 	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up 1
-	
-
-migrateup-docker:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 48):
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
 	
 
 # Not a target:
@@ -222,7 +216,7 @@ migratedown1:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 44):
+#  commands to execute (from `Makefile', line 55):
 	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
 	
 
@@ -235,7 +229,7 @@ awsecrlogin:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 86):
+#  commands to execute (from `Makefile', line 97):
 	aws ecr get-login-password | docker login --username AWS --password-stdin 335858042864.dkr.ecr.us-west-2.amazonaws.com
 	
 
@@ -244,7 +238,7 @@ sqlc:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 74):
+#  commands to execute (from `Makefile', line 85):
 	sqlc generate
 	
 
@@ -252,7 +246,7 @@ migratedown1-remote:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 70):
+#  commands to execute (from `Makefile', line 81):
 	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down 1
 	
 
@@ -262,40 +256,21 @@ migratedown1-remote:
 #  Modification time never checked.
 #  File has not been updated.
 
-migratedown-docker:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 54):
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
-	
-
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-27 14:07:21
+#  Last modified 2022-09-13 21:43:23
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
-
-migrateup1-docker:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
- 
-make: *** No rule to make target `all'.  Stop.
-
-#  commands to execute (from `Makefile', line 51):
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
-	
 
 server: swag
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 6):
+#  commands to execute (from `Makefile', line 7):
 	swag fmt
 	go fmt ./...
 	gow run main.go
@@ -306,7 +281,10 @@ proto:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 102):
+ 
+make: *** No rule to make target `all'.  Stop.
+
+#  commands to execute (from `Makefile', line 114):
 	rm -f pb/*.go
 	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
 	--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
@@ -316,31 +294,21 @@ proto:
 	statik -src=./gapi/swagger -dest=./gapi
 	
 
-postgres-dockercp:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 17):
-	# Connect container to localhost
-	docker run --name=postgres14 -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
-	
-
 test:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 78):
+#  commands to execute (from `Makefile', line 89):
 	go test -v -cover ./...
 	
 
-postgres-docker:
+migrateup-dock:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 21):
-	# Connect using a common container network
-	# docker run --name=postgres14 --network bank-network -p 5432:5432 -e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+#  commands to execute (from `Makefile', line 59):
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
 	
 
 db_schema:
@@ -348,7 +316,7 @@ db_schema:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 117):
+#  commands to execute (from `Makefile', line 132):
 	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
 	
 
@@ -357,16 +325,8 @@ createdb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 25):
-	docker exec -it postgres14 createdb --username=postgres --owner=postgres micro-bank
-	
-
-migratedown1-docker:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 57):
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
+#  commands to execute (from `Makefile', line 34):
+	docker exec -it postgres14 createdb --username=postgres --owner=postgres microbank
 	
 
 evans:
@@ -374,8 +334,33 @@ evans:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 111):
+#  commands to execute (from `Makefile', line 124):
 	evans --host localhost --port 9090 -r repl
+	
+
+migratedown-dock:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 65):
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
+	
+
+migrateup1-dock:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 62):
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
+	
+
+postgres-dock:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 29):
+	# docker run --name=postgres14 --network bank-network -p 5432:5432 \
+	-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 	
 
 # Not a target:
@@ -388,8 +373,16 @@ k8scontext:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 98):
-	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/micro-bank
+#  commands to execute (from `Makefile', line 110):
+	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/microbank
+	
+
+migratedown1-dock:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 68):
+	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
 	
 
 dropdb:
@@ -397,16 +390,16 @@ dropdb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 28):
-	docker exec -it postgres14 dropdb --username=postgres micro-bank
+#  commands to execute (from `Makefile', line 38):
+	docker exec -it postgres14 dropdb --username=postgres microbank
 	
 
 kubeconfig:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 94):
-	aws eks update-kubeconfig --name micro-bank --region us-west-2
+#  commands to execute (from `Makefile', line 106):
+	aws eks update-kubeconfig --name microbank --region us-west-2
 	
 
 migrateup:
@@ -414,7 +407,7 @@ migrateup:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 35):
+#  commands to execute (from `Makefile', line 46):
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up
 	
 
@@ -423,7 +416,7 @@ swag:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 11):
+#  commands to execute (from `Makefile', line 17):
 	swag init
 	
 
@@ -432,7 +425,7 @@ db_doc:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 114):
+#  commands to execute (from `Makefile', line 128):
 	dbdocs build dbdoc/microbank.dbml
 	
 
@@ -440,8 +433,16 @@ migrateup-remote:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 61):
+#  commands to execute (from `Makefile', line 72):
 	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up
+	
+
+migration:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 13):
+	migrate create -dir db/migration -ext sql -seq <filename>
 	
 
 awssecrets:
@@ -449,15 +450,16 @@ awssecrets:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 90):
-	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString --output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
+#  commands to execute (from `Makefile', line 101):
+	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString \ 
+	--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
 	
 
 randkey:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 14):
+#  commands to execute (from `Makefile', line 20):
 	openssl rand -hex 64 | head -c 32
 	
 
@@ -466,7 +468,7 @@ migrateup1:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 38):
+#  commands to execute (from `Makefile', line 49):
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up 1
 	
 
@@ -475,7 +477,7 @@ migratedown:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 41):
+#  commands to execute (from `Makefile', line 52):
 	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose down
 	
 
@@ -484,16 +486,16 @@ querydb:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 31):
-	docker exec -it postgres14 psql -U postgres micro-bank
+#  commands to execute (from `Makefile', line 42):
+	docker exec -it postgres14 psql -U postgres microbank
 	
 
 mock:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 82):
-	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
+#  commands to execute (from `Makefile', line 93):
+	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/microbank/db/sqlc Store
 	
 
 # files hash-table stats:
@@ -509,6 +511,6 @@ mock:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Aug 28 08:55:38 2022
+# Finished Make data base on Mon Jan  2 12:16:00 2023
 
  

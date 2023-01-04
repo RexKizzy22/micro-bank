@@ -7,16 +7,16 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/Rexkizzy22/micro-bank/api"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
 	"github.com/Rexkizzy22/micro-bank/pb"
-	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/util"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	_ "github.com/lib/pq"
 	"github.com/rakyll/statik/fs"
@@ -43,8 +43,13 @@ func main() {
 	runMigration(config.MigrationURL, config.DBSource)
 
 	store := db.NewStore(conn)
-	go runGatewayServer(config, store)
-	runGrpcServer(config, store)
+
+	// Run HTTP server
+	runGinServer(config, store)
+
+	// Run GRPC Gateway & GRPC servers
+	// go runGatewayServer(config, store)
+	// runGrpcServer(config, store)
 }
 
 func runMigration(migrationURL string, dbSource string) {
@@ -58,6 +63,31 @@ func runMigration(migrationURL string, dbSource string) {
 	}
 
 	log.Println("db migrated successfully")
+}
+
+// RUN HTTP SERVER
+func runGinServer(config util.Config, store db.Store) {
+	setSwagger(config)
+
+	server, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server: ", err)
+	}
+
+	err = server.Start(config.HTTP_ServerAddress)
+	if err != nil {
+		log.Fatal("unable to start server: ", err)
+	}
+}
+
+// programmatically setting general swagger info
+func setSwagger(config util.Config) {
+	docs.SwaggerInfo.Title = "Micro Bank Rest API"
+	docs.SwaggerInfo.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
+	docs.SwaggerInfo.Version = "1.0.0"
+	docs.SwaggerInfo.Host = config.HTTP_ServerAddress
+	docs.SwaggerInfo.BasePath = "/"
+	docs.SwaggerInfo.Schemes = []string{"http"}
 }
 
 func runGrpcServer(config util.Config, store db.Store) {
@@ -75,7 +105,7 @@ func runGrpcServer(config util.Config, store db.Store) {
 		log.Fatal("unable to listen on grpc server: ", err)
 	}
 
-	log.Printf("start grpc server at %s", listener.Addr().String())
+	log.Printf("grpc server listening at %s", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatal("unable to start grpc server: ", err)
@@ -108,6 +138,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal("cannot register handler server: ", err)
 	}
 
+	// http network request handler
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
 
@@ -133,26 +164,5 @@ func runGatewayServer(config util.Config, store db.Store) {
 	err = http.Serve(listener, mux)
 	if err != nil {
 		log.Fatal("unable to start HTTP gateway server: ", err)
-	}
-}
-
-// RUN HTTP SERVER
-func runGinServer(config util.Config, store db.Store) {
-	// programmatically setting general swagger info
-	docs.SwaggerInfo.Title = "Micro Bank Rest API"
-	docs.SwaggerInfo.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
-	docs.SwaggerInfo.Version = "1.0.0"
-	docs.SwaggerInfo.Host = config.HTTP_ServerAddress
-	docs.SwaggerInfo.BasePath = "/"
-	docs.SwaggerInfo.Schemes = []string{"http"}
-
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal("cannot create server: ", err)
-	}
-
-	err = server.Start(config.HTTP_ServerAddress)
-	if err != nil {
-		log.Fatal("unable to start server: ", err)
 	}
 }

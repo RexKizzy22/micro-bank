@@ -32,7 +32,7 @@ type CreateSessionParams struct {
 	IsBlocked    bool      `json:"is_blocked"`
 	RefreshToken string    `json:"refresh_token"`
 	UserAgent    string    `json:"user_agent"`
-	ClientIP     string    `json:"client_ip"`
+	ClientIp     string    `json:"client_ip"`
 	ExpiresAt    time.Time `json:"expires_at"`
 }
 
@@ -43,7 +43,7 @@ func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (S
 		arg.IsBlocked,
 		arg.RefreshToken,
 		arg.UserAgent,
-		arg.ClientIP,
+		arg.ClientIp,
 		arg.ExpiresAt,
 	)
 	var i Session

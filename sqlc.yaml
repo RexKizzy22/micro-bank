@@ -7,6 +7,6 @@ packages:
     queries: "./db/query"
     emit_json_tags: true
     emit_interface: true
-    emit_prepared_queries: false
-    emit_exact_table_names: false
-    emit_empty_slices: true
+    emit_prepared_queries: false 
+    emit_exact_table_names: false # sets the name of the generated struct to singular form even when the table name is pluralized
+    emit_empty_slices: true # sets the return value of a list/many query to an empty slice

@@ -48,10 +48,10 @@ func newUserResponse(user db.User) userResponse {
 // @Router  /user [POST]
 func (server *Server) createUser(ctx *gin.Context) {
 	var req createUserRequest
-
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
+	
 	hashPassword, err := util.HashPassword(req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -151,7 +151,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		IsBlocked:    false,
 		RefreshToken: refreshToken,
 		UserAgent:    ctx.Request.UserAgent(),
-		ClientIP:     ctx.ClientIP(),
+		ClientIp:     ctx.ClientIP(),
 		ExpiresAt:    refreshPayload.ExpiredAt,
 	})
 	if err != nil {

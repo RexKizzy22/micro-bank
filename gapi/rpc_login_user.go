@@ -48,7 +48,7 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		Username:     refreshPayload.Username,
 		RefreshToken: refreshToken,
 		UserAgent:    metad.UserAgent,
-		ClientIP:     metad.ClientIP,
+		ClientIp:     metad.ClientIP,
 		IsBlocked:    false,
 		ExpiresAt:    refreshPayload.ExpiredAt,
 	})
