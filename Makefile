@@ -2,6 +2,7 @@ setup:
 	setenv LOCAL_DB_URL "$(LOCAL_DB_URL)"
 	setenv DOCKER_DB_URL "$(DOCKER_DB_URL)" 
 	setenv AWS_RDS_DB_URL "$(AWS_RDS_DB_URL)"
+	setenv ECR_URL "$(ECR_URL)"
 
 # start local server
 server: swag
@@ -103,7 +104,7 @@ mock:
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container
 awsecrlogin:
-	aws ecr get-login-password | docker login --username AWS --password-stdin 335858042864.dkr.ecr.us-east-1.amazonaws.com
+	aws ecr get-login-password | docker login --username AWS --password-stdin "$(ECR_URL)"
 
 # Retrieve secrets from AWS Secret Manager and save them to app.env
 awssecrets:
