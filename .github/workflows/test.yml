@@ -1,54 +1,55 @@
-# name: Run unit tests
+name: Run unit tests
 
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
-# jobs:
+jobs:
 
-#   test:
-#     runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
 
-#     services:
+    services:
 
-#       postgres:
-#         image: postgres:14
-#         env:
-#           POSTGRES_USER: postgres
-#           POSTGRES_PASSWORD: MicroBank
-#           POSTGRES_DB: microbank
-#         ports:
-#           - 5432:5432
-#         # Set health checks to wait until postgres has started
-#         options: >-
-#           --health-cmd pg_isready
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: MicroBank
+          POSTGRES_DB: microbank
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-#     steps:
-#     - name: Check out code on github repository
-#       uses: actions/checkout@v3
+    steps:
+    - name: Check out code on github repository
+      uses: actions/checkout@v3
 
-#     - name: Set up Go
-#       uses: actions/setup-go@v3
-#       with:
-#         go-version: 1.18
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
 
-#     - name: Install golang-migrate
-#       run: | 
-#         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz 
-#         sudo mv migrate /usr/bin/migrate
-#         chmod +x /usr/bin/migrate
-#         which migrate
+    - name: Install golang-migrate
+      run: | 
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-amd64.tar.gz | tar xvz 
+        sudo mv migrate /usr/bin/migrate
+        chmod +x /usr/bin/migrate
+        which migrate
 
-#     - name: Run Migrations
-#       run: make migrateup
+    - name: Run Migrations
+      run: make migrateup
 
-#     # - name: Build
-#     #   run: go build -v ./...
+    - name: Run test
+      run: make test
+      
+    # - name: Build
+    #   run: go build -v ./...
     
-#     - name: Run test
-#       run: make test

@@ -53,7 +53,7 @@ func (route *Server) createAccount(ctx *gin.Context) {
 }
 
 type getAccountRequest struct {
-	ID int64 `uri:"id" binding:"required, min=1"`
+	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
 // @Summary  gets an existing account for a specified User ID
@@ -68,6 +68,7 @@ func (route *Server) getAccount(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
 
 	account, err := route.store.GetAccount(ctx, req.ID)

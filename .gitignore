@@ -1,4 +1,4 @@
-app.env
+*.env
 *.log
 zsh.txt
 docs/

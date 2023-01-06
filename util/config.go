@@ -21,7 +21,7 @@ type Config struct {
 
 func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
+	viper.SetConfigName("dev")
 	viper.SetConfigType("env")
 
 	// makes env variables provided in the terminal have more priority than those in .env file

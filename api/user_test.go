@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -53,7 +53,7 @@ func EqCreateUserMatcher(arg db.CreateUserParams, password string) gomock.Matche
 }
 
 func TestCreateUserAPI(t *testing.T) {
-	user, hashedPassword := randomUser(t)
+	user, password := randomUser(t)
 
 	testCases := []struct {
 		name          string
@@ -64,20 +64,19 @@ func TestCreateUserAPI(t *testing.T) {
 		{
 			name: "Ok",
 			body: gin.H{
-				"username":      user.Username,
-				"full_name":     user.FullName,
-				"email":         user.Email,
-				"hash_password": user.HashedPassword,
+				"username":  user.Username,
+				"full_name": user.FullName,
+				"email":     user.Email,
+				"password":  password,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.CreateUserParams{
-					Username:       user.Username,
-					Email:          user.Email,
-					FullName:       user.FullName,
-					HashedPassword: user.HashedPassword,
+					Username: user.Username,
+					Email:    user.Email,
+					FullName: user.FullName,
 				}
 				store.EXPECT().
-					CreateUser(gomock.Any(), EqCreateUserMatcher(arg, hashedPassword)).
+					CreateUser(gomock.Any(), EqCreateUserMatcher(arg, password)).
 					Times(1).
 					Return(user, nil)
 			},
@@ -88,7 +87,7 @@ func TestCreateUserAPI(t *testing.T) {
 		},
 
 		// TODO: complete other tests
-		
+
 		// {
 		// 	name:      "DuplicateUser",
 		// 	body: user.Username,
@@ -167,8 +166,12 @@ func TestCreateUserAPI(t *testing.T) {
 			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
-			url := fmt.Sprintf("/users/%s", tc.body)
-			request, err := http.NewRequest(http.MethodGet, url, nil)
+			// Marshall input body to json
+			body, err := json.Marshal(tc.body)
+			require.NoError(t, err)
+
+			url := "/user"
+			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
 			require.NoError(t, err)
 
 			server.router.ServeHTTP(recorder, request)
@@ -177,24 +180,32 @@ func TestCreateUserAPI(t *testing.T) {
 	}
 }
 
-func randomUser(t *testing.T) (db.User, string) {
-	hashedPassword, err := util.HashPassword(util.RandomString(6))
+// TODO: Write TestLoginUserAPI
+
+func randomUser(t *testing.T) (user db.User, password string) {
+	password = util.RandomString(6)
+	hashedPassword, err := util.HashPassword(password)
 	require.NoError(t, err)
 
-	return db.User{
+	user =  db.User{
 		Username:       util.RandomString(6),
 		FullName:       util.RandomOwner(),
 		Email:          util.RandomEmail(),
 		HashedPassword: hashedPassword,
-	}, hashedPassword
+	}
+
+	return
 }
 
 func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
-	data, err := ioutil.ReadAll(body)
+	data, err := io.ReadAll(body)
 	require.NoError(t, err)
 
 	var gotuser db.User
 	err = json.Unmarshal(data, &gotuser)
 	require.NoError(t, err)
-	require.Equal(t, user, gotuser)
+	require.Equal(t, user.Username, gotuser.Username)
+	require.Equal(t, user.FullName, gotuser.FullName)
+	require.Equal(t, user.Email, gotuser.Email)
+	require.Empty(t, gotuser.HashedPassword)
 }

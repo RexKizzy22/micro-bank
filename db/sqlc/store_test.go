@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -44,7 +44,7 @@ func TestTransferTx(t *testing.T) {
 		result := <-results
 		require.NotEmpty(t, result)
 
-		fmt.Println(">>>>before transfer", account1.Balance, account2.Balance)
+		// fmt.Println(">>>>before transfer", account1.Balance, account2.Balance)
 
 		// check transfer
 		transfer := result.Transfer
@@ -121,7 +121,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
 
-	fmt.Println(">>>>before transfer", account1.Balance, account2.Balance)
+	// fmt.Println(">>>>before transfer", account1.Balance, account2.Balance)
 
 	errs := make(chan error)
 

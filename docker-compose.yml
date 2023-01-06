@@ -21,5 +21,5 @@ services:
       - DB_SOURCE=postgresql://postgres:MicroBank@postgres:5432/microbank?sslmode=disable
     depends_on:
       - postgres
-    entrypoint: [ "/wait-for.sh", "postgres:5432", "--", "/start.sh" ]
+    # entrypoint: [ "/wait-for.sh", "postgres:5432", "--", "/start.sh" ]
     command: [ "/main" ]
