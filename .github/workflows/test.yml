@@ -45,6 +45,8 @@ jobs:
         which migrate
 
     - name: Run Migrations
+      env:
+        LOCAL_DB_URL: ${{ secrets.LOCAL_DB_URL }}
       run: make migrateup
 
     - name: Run test
