@@ -56,7 +56,7 @@ func (server *Server) Routes() {
 	authRoutes := router.Group("/").Use(authMiddleware(server.token))
 
 	authRoutes.POST("/accounts", server.createAccount)
-	authRoutes.POST("/accounts/:id", server.getAccount)
+	authRoutes.GET("/accounts/:id", server.getAccount)
 	authRoutes.GET("/accounts", server.listAccount)
 
 	authRoutes.POST("/transfers", server.createTransfer)

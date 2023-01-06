@@ -1,6 +1,8 @@
-LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/microbank?sslmode=disable
-DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres:5432/microbank?sslmode=disable
-AWS_RDS_DB_URL=postgresql://postgres:Kizito22@microbank.cs5zwlono2zn.us-west-2.rds.amazonaws.com:5432/micro_bank
+setup:
+	setenv LOCAL_DB_URL "$(LOCAL_DB_URL)"
+	setenv DOCKER_DB_URL "$(DOCKER_DB_URL)" 
+	setenv AWS_RDS_DB_URL "$(AWS_RDS_DB_URL)"
+	setenv ECR_URL "$(ECR_URL)"
 
 # start local server
 server: swag
@@ -98,16 +100,16 @@ test:
 
 # Generate database mock utilities for testing
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/microbank/db/sqlc Store
+	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container
 awsecrlogin:
-	aws ecr get-login-password | docker login --username AWS --password-stdin 335858042864.dkr.ecr.us-west-2.amazonaws.com
+	aws ecr get-login-password | docker login --username AWS --password-stdin "$(ECR_URL)"
 
 # Retrieve secrets from AWS Secret Manager and save them to app.env
 awssecrets:
-	aws secretsmanager get-secret-value --secret-id simple_bank -query SecretString \ 
-		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
+	aws secretsmanager get-secret-value --secret-id microbank -query SecretString \ 
+		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> prod.env
 
 # Configure kubeconfig file to use AWS context
 kubeconfig:

@@ -61,7 +61,6 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
-				requireBodyMatchAccount(t, recorder.Body, account)
 			},
 		},
 		{

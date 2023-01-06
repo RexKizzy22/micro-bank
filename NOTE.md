@@ -172,6 +172,8 @@ PostgreSQL
 
 ### MOCKDB FOR UNIT TESTING
 
+### RPC API - GRPC
+
 It is usually preferable to use a mock database to test all endpoints of an application. The benefits are:
 
 - Independent tests - isolate test data to avoid conflicts especially when testing in a big project with a large codebase.
