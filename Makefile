@@ -1,6 +1,7 @@
-LOCAL_DB_URL=postgresql://postgres:MicroBank@localhost:5432/microbank?sslmode=disable
-DOCKER_DB_URL=postgresql://postgres:MicroBank@postgres:5432/microbank?sslmode=disable
-AWS_RDS_DB_URL=postgresql://postgres:Microbank@microbank.czpvxhiocieh.us-east-1.rds.amazonaws.com:5432/microbank
+setup:
+	setenv LOCAL_DB_URL "$(LOCAL_DB_URL)"
+	setenv DOCKER_DB_URL "$(DOCKER_DB_URL)" 
+	setenv AWS_RDS_DB_URL "$(AWS_RDS_DB_URL)"
 
 # start local server
 server: swag
