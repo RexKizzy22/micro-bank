@@ -60,7 +60,8 @@ func (s *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	return tx.Commit()
 }
 
-// TODO: write a generic version of TransferTx
+//  TODO: write a generic version of TransferTx
+
 // performs money transfer from one account to another
 // creates a transfer record, adds account entries and updates accounts' balance in a single transaction
 func (s *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {

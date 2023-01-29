@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	// "fmt"
+	// "fmt"	
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -102,10 +102,10 @@ func TestTransferTx(t *testing.T) {
 		existed[k] = true
 
 		// TODO:check the final updated account
-		// updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
+		// updatedAccount1, err := testQueries.GetAccount(context.Background(), fromAccount.ID)
 		// require.NoError(t, err)
 
-		// updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
+		// updatedAccount2, err := testQueries.GetAccount(context.Background(), toAccount.ID)
 		// require.NoError(t, err)
 
 		// fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)
@@ -155,10 +155,10 @@ func TestTransferTxDeadlock(t *testing.T) {
 		require.NoError(t, err)
 
 		// TODO: check the final updated account
-		// updatedAccount1, err := testQueries.GetAccount(context.Background(), account1.ID)
+		// updatedAccount1, err := testQueries.GetAccount(context.Background(), fromAccountID.ID)
 		// require.NoError(t, err)
 
-		// updatedAccount2, err := testQueries.GetAccount(context.Background(), account2.ID)
+		// updatedAccount2, err := testQueries.GetAccount(context.Background(), toAccount.ID)
 		// require.NoError(t, err)
 
 		// fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)

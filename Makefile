@@ -111,13 +111,16 @@ awssecrets:
 	aws secretsmanager get-secret-value --secret-id microbank -query SecretString \ 
 		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> prod.env
 
+awscurrentuser:
+	aws sts get-caller-identity
+
 # Configure kubeconfig file to use AWS context
 kubeconfig:
-	aws eks update-kubeconfig --name microbank --region us-west-2
+	aws eks update-kubeconfig --name microbank --region us-east-1
 
 # Select a particular context for kubectl to use when there are multiple contexts registered
 k8scontext:
-	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/microbank
+# 	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/microbank 
 
 # Compile the GRPC interface definition language and serve assets from a statik server
 proto:
@@ -141,4 +144,4 @@ db_doc:
 db_schema:
 	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
 
-.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 migrateup-dock migrateup1-dock migratedown-dock migratedown1-dock migrateup-remote migrateup1-remote migratedown-remote migratedown1-remote sqlc test server swag awssecrets proto evans db_doc db_schema
+.PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 migrateup-dock migrateup1-dock migratedown-dock migratedown1-dock migrateup-remote migrateup1-remote migratedown-remote migratedown1-remote sqlc test server swag proto evans db_doc db_schema awsecrlogin awssecrets awscurrentuser kubeconfig k8scontext
