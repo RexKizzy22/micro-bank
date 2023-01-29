@@ -1,0 +1,21 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: microbank-api-deployment
+#   labels:
+#     app: microbank-api
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: microbank-api
+#   template:
+#     metadata:
+#       labels:
+#         app: microbank-api
+#     spec:
+#       containers:
+#       - name: microbank-api
+#         image: nginx:1.14.2 # TODO: use ECR image instead
+#         ports:
+#         - containerPort: 8080
