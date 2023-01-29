@@ -26,7 +26,6 @@ func LoadConfig(path string) (config Config, err error) {
 
 	// makes env variables provided in the terminal have more priority than those in .env file
 	viper.AutomaticEnv()
-	viper.BindEnv()
 
 	err = viper.ReadInConfig()
 	if err != nil {
