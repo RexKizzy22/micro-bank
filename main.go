@@ -34,7 +34,7 @@ func main() {
 		log.Fatal("unable to load config: ", err)
 	}
 
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	conn, err := sql.Open(config.DBDriver, config.FetchDBSource())
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
 	}

@@ -22,7 +22,7 @@ type createAccountRequest struct {
 // @Success  200      {object} db.Account
 // @Security ApiKeyAuth
 // @Router   /accounts [POST]
-func (route *Server) createAccount(ctx *gin.Context) {
+func (server *Server) createAccount(ctx *gin.Context) {
 	var req createAccountRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -36,7 +36,7 @@ func (route *Server) createAccount(ctx *gin.Context) {
 		Balance:  0,
 	}
 
-	account, err := route.store.CreateAccount(ctx, arg)
+	account, err := server.store.CreateAccount(ctx, arg)
 	if err != nil {
 		if pErr, ok := err.(*pq.Error); ok {
 			switch pErr.Code.Name() {
@@ -63,7 +63,7 @@ type getAccountRequest struct {
 // @Success  200 {object} db.Account
 // @Security ApiKeyAuth
 // @Router   /accounts/:id [GET]
-func (route *Server) getAccount(ctx *gin.Context) {
+func (server *Server) getAccount(ctx *gin.Context) {
 	var req getAccountRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -71,7 +71,7 @@ func (route *Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
-	account, err := route.store.GetAccount(ctx, req.ID)
+	account, err := server.store.GetAccount(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
