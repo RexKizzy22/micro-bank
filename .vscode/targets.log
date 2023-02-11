@@ -10,6 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
+
 # Make data base, printed on Fri Feb  3 13:00:10 2023
 
 # Variables
@@ -162,13 +163,14 @@ LANG = C
 # environment
 VSCODE_PID = 571
 # variable set hash-table stats:
-# Load=73/1024=7%, Rehash=0, Collisions=2/96=2%
+# Load=70/1024=7%, Rehash=0, Collisions=2/93=2%
 
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
+
 
 # . (device 16777234, inode 1095673): 35 files, no impossibilities.
 
@@ -198,6 +200,7 @@ postgres:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 26):
  
+
 	docker run --name=postgres14 -p 5430:5432 \
 	-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 	
@@ -294,6 +297,9 @@ Makefile:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 server: swag
+ 
+make: *** No rule to make target `all'.  Stop.
+
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -467,7 +473,9 @@ migrateup-remote:
 	
 
 awscurrentuser:
+
  
+
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -557,6 +565,7 @@ stop-postgres:
 # # of strcache buffers: 1
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
 
 # Finished Make data base on Fri Feb  3 13:00:10 2023
 
