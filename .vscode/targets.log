@@ -6,8 +6,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Wed Jan 25 09:13:00 2023
+
+
+# Make data base, printed on Fri Feb  3 13:00:10 2023
 
 # Variables
 
@@ -22,6 +26,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # automatic
 @F = $(notdir $@)
 # makefile
+ 
 CURDIR := /Users/emmanuel/Desktop/home/golang/micro-bank
 # makefile
 SHELL = /bin/sh
@@ -48,11 +53,13 @@ PNPM_HOME = /Users/emmanuel/Library/pnpm
 # environment
 GOPATH = /Users/emmanuel/code/golang
 # environment
+LaunchInstanceID = DDE16A65-55AE-4A76-B20F-31C67603C699
+# environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.8qKVBBMiig/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.kyvp3iDtPI/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -74,7 +81,7 @@ HOME = /Users/emmanuel
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/97dec172d3256f8ca4bfb2143f3f76b503ca0534
+VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/e2816fe719a4026ffa1ee0189dc89bdfdbafb164
 # environment
 LOGNAME = emmanuel
 # environment
@@ -110,7 +117,7 @@ TMPDIR = /var/folders/ww/0cclvqc57bl5whyqmc68h5440000gp/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.74.3-main.sock
+VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.75.0-main.sock
 # environment
 MallocNanoZone = 0
 # environment
@@ -122,11 +129,13 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.19367065.19367071
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.20634495.20634503
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
+# environment
+VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 +F = $(notdir $+)
 # environment
@@ -141,6 +150,8 @@ MAKEFILES :=
 <F = $(notdir $<)
 # environment
 LC_ALL = C
+# environment
+SECURITYSESSIONID = 186b2
 # automatic
 ^F = $(notdir $^)
 # default
@@ -150,7 +161,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 92002
+VSCODE_PID = 571
 # variable set hash-table stats:
 # Load=70/1024=7%, Rehash=0, Collisions=2/93=2%
 
@@ -160,9 +171,10 @@ VSCODE_PID = 92002
 
 # Directories
 
-# . (device 16777231, inode 1095673): 34 files, no impossibilities.
 
-# 34 files, no impossibilities in 1 directories.
+# . (device 16777234, inode 1095673): 35 files, no impossibilities.
+
+# 35 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -187,6 +199,8 @@ postgres:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 26):
+ 
+
 	docker run --name=postgres14 -p 5430:5432 \
 	-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 	
@@ -459,6 +473,9 @@ migrateup-remote:
 	
 
 awscurrentuser:
+
+ 
+
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -549,6 +566,7 @@ stop-postgres:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Jan 25 09:13:00 2023
+
+# Finished Make data base on Fri Feb  3 13:00:10 2023
 
  

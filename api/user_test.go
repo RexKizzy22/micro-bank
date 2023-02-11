@@ -187,7 +187,7 @@ func randomUser(t *testing.T) (user db.User, password string) {
 	hashedPassword, err := util.HashPassword(password)
 	require.NoError(t, err)
 
-	user =  db.User{
+	user = db.User{
 		Username:       util.RandomString(6),
 		FullName:       util.RandomOwner(),
 		Email:          util.RandomEmail(),

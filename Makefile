@@ -109,7 +109,10 @@ awsecrlogin:
 # Retrieve secrets from AWS Secret Manager and save them to app.env
 awssecrets:
 	aws secretsmanager get-secret-value --secret-id microbank -query SecretString \ 
-		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> prod.env
+		--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
+
+awscurrentuser:
+	aws sts get-caller-identity
 
 awscurrentuser:
 	aws sts get-caller-identity

@@ -34,13 +34,13 @@ func main() {
 		log.Fatal("unable to load config: ", err)
 	}
 
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	conn, err := sql.Open(config.DBDriver, config.FetchDBSource())
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
 	}
 
 	// run db migration
-	runMigration(config.MigrationURL, config.DBSource)
+	runMigration(config.MigrationURL, config.FetchDBSource())
 
 	store := db.NewStore(conn)
 
