@@ -11,7 +11,8 @@ make: *** No rule to make target `all'.  Stop.
 
 
 
-# Make data base, printed on Fri Feb  3 13:00:10 2023
+
+# Make data base, printed on Fri Feb 10 13:35:58 2023
 
 # Variables
 
@@ -85,7 +86,7 @@ VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/Cached
 # environment
 LOGNAME = emmanuel
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -290,7 +291,10 @@ migratedown1-remote:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2023-01-24 08:08:06
+ 
+make: *** No rule to make target `all'.  Stop.
+
+#  Last modified 2023-02-10 12:46:41
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -499,7 +503,7 @@ awssecrets:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 111):
 	aws secretsmanager get-secret-value --secret-id microbank -query SecretString \ 
-	--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> prod.env
+	--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
 	
 
 randkey:
@@ -567,6 +571,6 @@ stop-postgres:
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
 
-# Finished Make data base on Fri Feb  3 13:00:10 2023
+# Finished Make data base on Fri Feb 10 13:35:58 2023
 
  

@@ -25,6 +25,8 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
+	viper.SetDefault("ProdDBSource", "")
+	viper.SetDefault("AppEnv", "")
 
 	// makes env variables provided in the terminal have more priority than those in .env file
 	viper.AutomaticEnv()
@@ -39,9 +41,11 @@ func LoadConfig(path string) (config Config, err error) {
 }
 
 func (config *Config) FetchDBSource() string {
-	if config.AppEnv == "development" {
-		return config.DBSource
+	env := viper.GetString("AppEnv")
+	remoteDB := viper.GetString("ProdDBSource")
+	if env == "production" {
+		return remoteDB
 	} else {
-		return config.ProdDBSource
+		return config.DBSource
 	}
 }
