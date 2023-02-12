@@ -6,11 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Fri Feb  3 13:00:10 2023
+# Make data base, printed on Fri Feb 10 13:35:58 2023
 
 # Variables
 
@@ -25,7 +22,6 @@ make: *** No rule to make target `all'.  Stop.
 # automatic
 @F = $(notdir $@)
 # makefile
- 
 CURDIR := /Users/emmanuel/Desktop/home/golang/micro-bank
 # makefile
 SHELL = /bin/sh
@@ -84,7 +80,7 @@ VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/Cached
 # environment
 LOGNAME = emmanuel
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -197,7 +193,6 @@ postgres:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 26):
- 
 	docker run --name=postgres14 -p 5430:5432 \
 	-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
 	
@@ -287,7 +282,10 @@ migratedown1-remote:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2023-01-24 08:08:06
+ 
+make: *** No rule to make target `all'.  Stop.
+
+#  Last modified 2023-02-10 12:46:41
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -467,7 +465,6 @@ migrateup-remote:
 	
 
 awscurrentuser:
- 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -491,7 +488,7 @@ awssecrets:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 111):
 	aws secretsmanager get-secret-value --secret-id microbank -query SecretString \ 
-	--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> prod.env
+	--output text | jq.'to_entries|map("\(.key)=\(.value)")|.[]' >> app.env
 	
 
 randkey:
@@ -558,6 +555,6 @@ stop-postgres:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Feb  3 13:00:10 2023
+# Finished Make data base on Fri Feb 10 13:35:58 2023
 
  
