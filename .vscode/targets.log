@@ -158,13 +158,14 @@ LANG = C
 # environment
 VSCODE_PID = 571
 # variable set hash-table stats:
-# Load=73/1024=7%, Rehash=0, Collisions=2/96=2%
+# Load=70/1024=7%, Rehash=0, Collisions=2/93=2%
 
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
+
 
 # . (device 16777234, inode 1095673): 35 files, no impossibilities.
 
@@ -292,6 +293,9 @@ make: *** No rule to make target `all'.  Stop.
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 server: swag
+ 
+make: *** No rule to make target `all'.  Stop.
+
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
