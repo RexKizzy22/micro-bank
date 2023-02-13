@@ -35,7 +35,8 @@ func main() {
 	}
 
 	dbConnString := config.FetchDBSource()
-	conn, err := sql.Open(config.DBDriver, dbConnString)
+	dbDriver := config.FetchDBDriver()
+	conn, err := sql.Open(dbDriver, dbConnString)
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
 	}

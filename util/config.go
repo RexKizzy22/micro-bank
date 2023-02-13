@@ -51,3 +51,13 @@ func (config *Config) FetchDBSource() string {
 		return config.DBSource
 	}
 }
+
+func (config *Config) FetchDBDriver() string {
+	env := viper.GetString("APP_ENV")
+	remoteDBDRIVER := viper.GetString("PROD_DB_DRIVER")
+	if env == "production" {
+		return remoteDBDRIVER
+	} else {
+		return config.DBDriver
+	}
+}
