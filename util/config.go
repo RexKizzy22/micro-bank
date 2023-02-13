@@ -25,6 +25,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
+	viper.SetEnvPrefix("app")
 	
 	// makes env variables provided in the terminal have more priority than those in .env file
 	viper.AutomaticEnv()
