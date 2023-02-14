@@ -36,6 +36,7 @@ func main() {
 
 	dbConnString := config.FetchDBSource()
 	dbDriver := config.FetchDBDriver()
+
 	
 	conn, err := sql.Open(dbDriver, dbConnString)
 	if err != nil {
