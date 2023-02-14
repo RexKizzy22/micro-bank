@@ -31,6 +31,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AutomaticEnv()
 
 	viper.SetDefault("PROD_DB_SOURCE", "")
+	viper.SetDefault("PROD_DB_DRIVER", "")
 	viper.SetDefault("APP_ENV", "")
 
 	err = viper.ReadInConfig()
