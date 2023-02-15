@@ -47,6 +47,10 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 func (server *Server) Routes() {
 	router := gin.Default()
 
+	if server.config.AppEnv == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/user", server.createUser)
