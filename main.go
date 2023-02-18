@@ -121,7 +121,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal("cannot create server: ", err)
 	}
 
-	// Option to format grpc response jsonData to have snake-cased fields
+	// option to format grpc response jsonData to have snake-cased fields
 	jsonOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
 			UseProtoNames: true,
@@ -145,7 +145,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
 
-	// serves static swagger assets from the grpc static asset folder
+	// serves static swagger-ui assets from the grpc static asset folder
 	// fs := http.FileServer(http.Dir("/gapi/swagger"))
 	// mux.Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 

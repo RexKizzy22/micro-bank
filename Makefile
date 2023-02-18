@@ -114,9 +114,6 @@ awssecrets:
 awscurrentuser:
 	aws sts get-caller-identity
 
-awscurrentuser:
-	aws sts get-caller-identity
-
 # Configure kubeconfig file to use AWS context
 kubeconfig:
 	aws eks update-kubeconfig --name microbank --region us-east-1

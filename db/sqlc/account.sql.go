@@ -93,12 +93,19 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 }
 
 const getAccountForUpdate = `-- name: GetAccountForUpdate :one
+
+
 SELECT id, owner, balance, currency, created_at FROM accounts
 WHERE id = $1
 LIMIT 1
 FOR NO KEY UPDATE
 `
 
+// FOR UPDATE make read operations lock in a transaction
+// so that other read operations get the updated values
+// FOR NO KEY UPDATE communicates to the database engine that
+// an exclusive lock should not be acquired by foreign key transactions
+// since the foreign key is not updated in the relevant queries
 func (q *Queries) GetAccountForUpdate(ctx context.Context, id int64) (Account, error) {
 	row := q.db.QueryRowContext(ctx, getAccountForUpdate, id)
 	var i Account
