@@ -63,7 +63,7 @@ func TestUpdateUserOnlyFullName(t *testing.T) {
 		Username: oldUser.Username,
 		FullName: sql.NullString{
 			String: newFullName,
-			Valid: true,
+			Valid:  true,
 		},
 	})
 
@@ -72,20 +72,20 @@ func TestUpdateUserOnlyFullName(t *testing.T) {
 	require.Equal(t, newFullName, updatedUser.FullName)
 	require.Equal(t, oldUser.Username, updatedUser.Username)
 	require.Equal(t, oldUser.HashedPassword, updatedUser.HashedPassword)
-	require.Equal(t,oldUser.Email, updatedUser.Email)
+	require.Equal(t, oldUser.Email, updatedUser.Email)
 }
 
 func TestUpdateUserOnlyPassword(t *testing.T) {
 	oldUser := createRandomUser(t)
 
 	newPassword, err := util.HashPassword(util.RandomString(6))
-	require.NoError(t,err)
+	require.NoError(t, err)
 
 	updatedUser, err := testQueries.UpdateUser(context.Background(), UpdateUserParams{
 		Username: oldUser.Username,
 		HashedPassword: sql.NullString{
 			String: newPassword,
-			Valid: true,
+			Valid:  true,
 		},
 	})
 
@@ -94,7 +94,7 @@ func TestUpdateUserOnlyPassword(t *testing.T) {
 	require.Equal(t, newPassword, updatedUser.HashedPassword)
 	require.Equal(t, oldUser.Username, updatedUser.Username)
 	require.Equal(t, oldUser.FullName, updatedUser.FullName)
-	require.Equal(t,oldUser.Email, updatedUser.Email)
+	require.Equal(t, oldUser.Email, updatedUser.Email)
 }
 
 func TestUpdateUserOnlyEmail(t *testing.T) {
@@ -105,7 +105,7 @@ func TestUpdateUserOnlyEmail(t *testing.T) {
 		Username: oldUser.Username,
 		Email: sql.NullString{
 			String: newEmail,
-			Valid: true,
+			Valid:  true,
 		},
 	})
 
@@ -114,7 +114,7 @@ func TestUpdateUserOnlyEmail(t *testing.T) {
 	require.Equal(t, newEmail, updatedUser.Email)
 	require.Equal(t, oldUser.Username, updatedUser.Username)
 	require.Equal(t, oldUser.FullName, updatedUser.FullName)
-	require.Equal(t,oldUser.HashedPassword, updatedUser.HashedPassword)
+	require.Equal(t, oldUser.HashedPassword, updatedUser.HashedPassword)
 }
 
 func TestUpdateUserAll(t *testing.T) {
@@ -123,21 +123,21 @@ func TestUpdateUserAll(t *testing.T) {
 	newEmail := util.RandomEmail()
 	newFullName := util.RandomOwner()
 	newPassword, err := util.HashPassword(util.RandomString(6))
-	require.NoError(t,err)
+	require.NoError(t, err)
 
 	updatedUser, err := testQueries.UpdateUser(context.Background(), UpdateUserParams{
 		Username: oldUser.Username,
 		Email: sql.NullString{
 			String: newEmail,
-			Valid: true,
+			Valid:  true,
 		},
 		FullName: sql.NullString{
 			String: newFullName,
-			Valid: true,
+			Valid:  true,
 		},
 		HashedPassword: sql.NullString{
 			String: newPassword,
-			Valid: true,
+			Valid:  true,
 		},
 	})
 
@@ -148,6 +148,6 @@ func TestUpdateUserAll(t *testing.T) {
 	require.NotEqual(t, oldUser.FullName, updatedUser.FullName)
 
 	require.Equal(t, newEmail, updatedUser.Email)
-	require.Equal(t,  newFullName, updatedUser.FullName)
+	require.Equal(t, newFullName, updatedUser.FullName)
 	require.Equal(t, newPassword, updatedUser.HashedPassword)
 }
