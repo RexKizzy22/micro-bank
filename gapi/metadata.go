@@ -18,23 +18,28 @@ type Metadata struct {
 	ClientIP  string
 }
 
+// gets metadata from HTTP and GRPC requests to a grpc-gateway server using the metadata and peer packages
 func (server *Server) getMetadata(ctx context.Context) *Metadata {
 	metad := &Metadata{}
 
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		// extract metadata (user agent) from a HTTP request to a grpc-gateway server
 		if userAgents := md.Get(grpcGatewayUserAgentHeader); len(userAgents) > 0 {
 			metad.UserAgent = userAgents[0]
 		}
 
+		// extract metadata (user agent) from a GRPC request to a grpc-gateway server
 		if userAgents := md.Get(userAgentHeader); len(userAgents) > 0 {
 			metad.UserAgent = userAgents[0]
 		}
 
+		// extract metadata (client IP) from a HTTP request to a grpc-gateway server
 		if userAgents := md.Get(xForwardedForHeader); len(userAgents) > 0 {
 			metad.ClientIP = userAgents[0]
 		}
 	}
 
+	// extract metadata (client IP address) from a GRPC request to a grpc-gateway server
 	if p, ok := peer.FromContext(ctx); ok {
 		metad.ClientIP = p.Addr.String()
 	}

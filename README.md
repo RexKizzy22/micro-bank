@@ -6,7 +6,7 @@
 * creating an account for a particular customer using one of the accepted currencies
 * transfering money between customer accounts
 * retrieving all accounts created by the customer in the current session
-* retrieving an account created by the customer in the current session
+* retrieving one account created by the customer in the current session
 
 **Read [NOTE.md](NOTE.md) for detailed information about this project**
 

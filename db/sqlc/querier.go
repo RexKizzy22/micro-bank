@@ -21,6 +21,11 @@ type Querier interface {
 	DeleteEntry(ctx context.Context, id int64) error
 	DeleteTrasfer(ctx context.Context, id int64) error
 	GetAccount(ctx context.Context, id int64) (Account, error)
+	// FOR UPDATE make read operations lock in a transaction
+	// so that other read operations get the updated values
+	// FOR NO KEY UPDATE communicates to the database engine that
+	// an exclusive lock should not be acquired by foreign key transactions
+	// since the foreign key is not updated in the relevant queries
 	GetAccountForUpdate(ctx context.Context, id int64) (Account, error)
 	GetEntry(ctx context.Context, id int64) (Entry, error)
 	GetSession(ctx context.Context, id uuid.UUID) (Session, error)
@@ -32,6 +37,7 @@ type Querier interface {
 	UpdateAccount(ctx context.Context, arg UpdateAccountParams) (Account, error)
 	UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entry, error)
 	UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (Transfer, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

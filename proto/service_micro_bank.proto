@@ -9,6 +9,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/Rexkizzy22/micro-bank/pb";
 
+// programmatically generate swagger json file using the definitions in the .proto files
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "Micro Bank GRPC API";
