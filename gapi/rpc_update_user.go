@@ -10,15 +10,23 @@ import (
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/Rexkizzy22/micro-bank/validation"
 
-	// "github.com/lib/pq"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+	authPayload, err := server.authorizeUser(ctx)
+	if err != nil {
+		return nil, unauthorizedError(err)
+	}
+
 	if violations := validateUpdatedUser(req); violations != nil {
 		return nil, inValidArgumentError(violations)
+	}
+
+	if authPayload.Username != req.GetUsername() {
+		return nil, status.Errorf(codes.PermissionDenied, "cannot update another user's info")
 	}
 
 	arg := db.UpdateUserParams{
