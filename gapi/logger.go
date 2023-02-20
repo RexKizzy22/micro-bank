@@ -12,10 +12,10 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func GRPCLogger (
-	ctx context.Context, 
-	req interface{}, 
-	info *grpc.UnaryServerInfo, 
+func GRPCLogger(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (resp interface{}, err error) {
 	startTime := time.Now()
@@ -33,11 +33,11 @@ func GRPCLogger (
 	}
 
 	logger.Str("protocol", "grpc").
-	Str("method", info.FullMethod).
-	Int("statusCode", int(statusCode)).
-	Str("status_text", statusCode.String()).
-	Dur("duration", timeTaken).
-	Msg("received GRPC request")
+		Str("method", info.FullMethod).
+		Int("statusCode", int(statusCode)).
+		Str("status_text", statusCode.String()).
+		Dur("duration", timeTaken).
+		Msg("received GRPC request")
 
 	return result, err
 }
@@ -45,7 +45,7 @@ func GRPCLogger (
 type ResponseRecorder struct {
 	http.ResponseWriter
 	StatusCode int
-	Body []byte
+	Body       []byte
 }
 
 func (rec *ResponseRecorder) WriteHeader(statusCode int) {
@@ -64,7 +64,7 @@ func HTTPLogger(handler http.Handler) http.Handler {
 		startTime := time.Now()
 		rec := &ResponseRecorder{
 			ResponseWriter: res,
-			StatusCode: http.StatusOK,
+			StatusCode:     http.StatusOK,
 		}
 		handler.ServeHTTP(rec, req)
 		timeTaken := time.Since(startTime)
@@ -75,12 +75,12 @@ func HTTPLogger(handler http.Handler) http.Handler {
 		}
 
 		logger.Str("protocol", "http").
-		Str("method", req.Method).
-		Str("path", req.RequestURI).
-		Int("statusCode", rec.StatusCode).
-		Str("status_text", http.StatusText(rec.StatusCode)).
-		Dur("duration", timeTaken).
-		Msg("received HTTP request")
+			Str("method", req.Method).
+			Str("path", req.RequestURI).
+			Int("statusCode", rec.StatusCode).
+			Str("status_text", http.StatusText(rec.StatusCode)).
+			Dur("duration", timeTaken).
+			Msg("received HTTP request")
 
 	})
 }
