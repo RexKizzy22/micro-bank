@@ -58,6 +58,28 @@ paths:
             $ref: '#/definitions/pbLoginUserRequest'
       tags:
         - MicroBank
+  /v1/update_user:
+    patch:
+      summary: Update a new user
+      description: Use this to update a new user
+      operationId: MicroBank_UpdateUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/pbUpdateUserResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/pbUpdateUserRequest'
+      tags:
+        - MicroBank
 definitions:
   pbCreateUserRequest:
     type: object
@@ -97,6 +119,22 @@ definitions:
         format: date-time
       sessionId:
         type: string
+      user:
+        $ref: '#/definitions/pbUser'
+  pbUpdateUserRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      fullName:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+  pbUpdateUserResponse:
+    type: object
+    properties:
       user:
         $ref: '#/definitions/pbUser'
   pbUser:
