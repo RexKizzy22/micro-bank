@@ -36,6 +36,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 		token:  tokenMaker,
 	}
 
+	// registers the custom validation for the currency request field
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("currency", validateCurrency)
 	}

@@ -6,6 +6,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// creates a struct whose fields specifies the error field name and a description of the field
+// violation as against the validation of the field
 func fieldViolation(field string, err error) *errdetails.BadRequest_FieldViolation {
 	return &errdetails.BadRequest_FieldViolation{
 		Field:       field,
@@ -13,6 +15,7 @@ func fieldViolation(field string, err error) *errdetails.BadRequest_FieldViolati
 	}
 }
 
+// checks if invalid arguments were sent in the request
 func inValidArgumentError(violations []*errdetails.BadRequest_FieldViolation) error {
 	badRequest := &errdetails.BadRequest{FieldViolations: violations}
 	statusInvalid := status.New(codes.InvalidArgument, "invalid parameters")

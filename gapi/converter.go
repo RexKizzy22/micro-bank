@@ -6,6 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+// converts db user to appropriate user response struct for clients
 func converter(user db.User) *pb.User {
 	return &pb.User{
 		Username:          user.Username,

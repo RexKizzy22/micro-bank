@@ -57,7 +57,7 @@ func main() {
 	// Run HTTP server
 	runGinServer(config, store)
 
-	// Run GRPC Gateway & GRPC servers
+	// Run gRPC-Gateway & gRPC servers
 	// go runGatewayServer(config, store)
 	// runGrpcServer(config, store)
 }
@@ -108,6 +108,7 @@ func runGrpcServer(config util.Config, store db.Store) {
 
 	grpcLogger := grpc.UnaryInterceptor(gapi.GRPCLogger)
 	grpcServer := grpc.NewServer(grpcLogger)
+
 	pb.RegisterMicroBankServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
@@ -129,7 +130,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal().Msgf("cannot create server: %s", err)
 	}
 
-	// option to format grpc response jsonData to have snake-cased fields
+	// option to format gRPC response jsonData to have snake-cased fields
 	jsonOption := runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
 			UseProtoNames: true,
@@ -154,7 +155,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 	handler := gapi.HTTPLogger(mux)
 	mux.Handle("/", handler)
 
-	// serves static swagger-ui assets from the grpc static asset folder
+	// serves static swagger-ui assets from the gRPC static asset folder
 	// fs := http.FileServer(http.Dir("/gapi/swagger"))
 	// mux.Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
