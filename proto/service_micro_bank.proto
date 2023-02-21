@@ -13,7 +13,7 @@ option go_package = "github.com/Rexkizzy22/micro-bank/pb";
 // programmatically generate swagger json file using the definitions in the .proto files
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Micro Bank GRPC API";
+    title: "Micro Bank gRPC API";
     description: "A production-grade Go API that provides money transfer services between accounts of registered users";
     version: "1.0";
     contact: {

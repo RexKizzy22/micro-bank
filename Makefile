@@ -122,7 +122,7 @@ kubeconfig:
 k8scontext:
 # 	kubectl config use-context arn:aws:eks:us-west-2:335858042864:cluster/microbank 
 
-# Compile the GRPC interface definition language and serve assets from a statik server
+# Compile the gRPC interface definition language and serve assets from a statik server
 proto:
 	rm -f pb/*.go
 	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
@@ -132,7 +132,7 @@ proto:
 	proto/*.proto
 	statik -src=./gapi/swagger -dest=./gapi
 
-# run GRPC calls using Evans client
+# run gRPC calls using Evans client
 evans:
 	evans --host localhost --port 9090 -r repl
 

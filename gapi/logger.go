@@ -32,12 +32,12 @@ func GRPCLogger(
 		logger = log.Error().Err(err)
 	}
 
-	logger.Str("protocol", "grpc").
+	logger.Str("protocol", "gRPC").
 		Str("method", info.FullMethod).
 		Int("statusCode", int(statusCode)).
 		Str("status_text", statusCode.String()).
 		Dur("duration", timeTaken).
-		Msg("received GRPC request")
+		Msg("received gRPC request")
 
 	return result, err
 }
@@ -58,7 +58,7 @@ func (rec *ResponseRecorder) Write(body []byte) (int, error) {
 	return rec.ResponseWriter.Write(body)
 }
 
-// logger middleware for HTTP requests to the grpc-gateway server
+// logger middleware for HTTP requests to the gRPC-gateway server
 func HTTPLogger(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		startTime := time.Now()
