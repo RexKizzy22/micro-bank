@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/Rexkizzy22/micro-bank/api"
-	"github.com/Rexkizzy22/micro-bank/api/docs"
+	"github.com/Rexkizzy22/micro-bank/docs"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
