@@ -22,4 +22,4 @@ jobs:
       - name: Update MicroBank dbdocs
         env:
           DBDOCS_TOKEN: ${{secrets.DBDOCS_TOKEN}}
-        run: dbdocs build dbdoc/microbank.dbml
+        run: dbdocs build schema/microbank.dbml

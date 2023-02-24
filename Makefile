@@ -128,9 +128,9 @@ proto:
 	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
     --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
 	--grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
-    --openapiv2_out=gapi/swagger --openapiv2_opt=allow_merge=true,merge_file_name=microbank,output_format=yaml \
+    --openapiv2_out=gapi/doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=microbank,output_format=yaml \
 	proto/*.proto
-	statik -src=./gapi/swagger -dest=./gapi
+	statik -src=./gapi/doc/swagger -dest=./gapi
 
 # run gRPC calls using Evans client
 evans:
@@ -138,10 +138,10 @@ evans:
 
 # generate database documentation using dbdiagram.io CLI
 db_doc:
-	dbdocs build dbdoc/microbank.dbml
+	dbdocs build schema/microbank.dbml
 
 # generate database schema from schema design tool by dbdiagram.io
 db_schema:
-	dbml2sql --postgres -o dbdoc/microbank.sql dbdoc/microbank.dbml
+	dbml2sql --postgres -o schema/microbank.sql schema/microbank.dbml
 
 .PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 migrateup-dock migrateup1-dock migratedown-dock migratedown1-dock migrateup-remote migrateup1-remote migratedown-remote migratedown1-remote sqlc test server swag proto evans db_doc db_schema awsecrlogin awssecrets awscurrentuser kubeconfig k8scontext

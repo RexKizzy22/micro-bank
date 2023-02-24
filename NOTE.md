@@ -21,9 +21,9 @@ DB Diagram is a tool that enables us to save and share the database schema as a 
 
 We use code generation tools to generate code to run CRUD operations that interact 
 with the database (serves as a repository pattern), we can create a schema in a target
-database engine. In this project, we use SQLC.
+database engine. In this project, we use [SQLC](https://sqlc.dev/).
 
-Below shows how SQLC compares with its alternatives in the golang ecosystem.
+Below shows how [SQLC](https://sqlc.dev/) compares with its alternatives in the golang ecosystem.
 
 ### [The Standard Database/SQL library](https://pkg.go.dev/database/sql)
 
@@ -101,7 +101,7 @@ The HTTP server struct has the following properties:
 type Server struct {
    token token.Maker, // an interface that contains VerifyToken and CreateToken methods
    config *util.Config, // a struct that contains environment variables
-   router *gin.Router, // GIN router engine
+   router *gin.Engine, // GIN router engine
    store db.Store // an interface that contains all functions that interact with the database
 }
 ```
@@ -122,7 +122,7 @@ func (server *Server) HandlerName(ctx *gin.Context) {}
 ```
 
 One of the most impressive things about this project is that the 
-swagger assets are embedded in the the application binary hence both 
+swagger assets are embedded in the the application server binary hence both 
 the swagger docs and server are hosted and shipped together using the 
 [**statik**](github.com/rakyll/statik/fs) library. This also means that 
 we can use [**statik**](https://github.com/statik/statik) file server to 
@@ -156,16 +156,16 @@ following reasons:
 ## UNIT TESTING
 
 Golang was designed with unit testing in mind therefore making it part of the language binary. 
-It has a robust unit testing convention where a `TestMain` function defined for each package 
+It has a robust unit testing convention where a ```TestMain``` function defined for each package 
 in an application serves as an entry point for the tests in that package and the test files 
 are colocated in the same directory as the files containing the code they are testing. 
-The `TestMain` function usually takes in a parameter typically named `m` with type `*testing.M` 
-which has a `Run()` method that should be called in an enclosing `os.Exit()` function call, 
-thus `os.Exit(m.Run())` should be the last line of code in the `TestMain` function. 
+The ```TestMain``` function usually takes in a parameter typically named ```m``` with type ```*testing.M``` 
+which has a ```Run()``` method that should be called in an enclosing ```os.Exit()``` function call, 
+thus ```os.Exit(m.Run())``` should be the last line of code in the ```TestMain``` function. 
 This reports the success or failure of the tests ran in the package.
 
 The [testify library](https://github.com/stretchr/testify) has several sub-packages containing
- testing utilities. We make use of the `require` sub-package which serves as a test-assertion 
+ testing utilities. We make use of the ```require``` sub-package which serves as a test-assertion 
  utility in this project. It is a mature and easy to use library.
 
 ## MOCKDB FOR UNIT TESTING
@@ -181,7 +181,7 @@ All that is required is for the mock DB to implement the same interface as the r
 
 There are 2 ways to mock a database:
 1. Use a fake DB (MEMORY) - implement a fake version of DB; store data in memory.
-   - This is easy to implement but requires us to write more code with is time consuming for both development and maintenance.
+   - This is easy to implement but requires us to write more code which is time consuming for both development and maintenance.
 2. Use DB stubs ([GOMOCK](https://github.com/golang/mock)) - Generate and build DB stubs that return hard-coded values
 
 We use the db stubs in this project and write our unit tests in a table-driven manner 
@@ -205,7 +205,7 @@ To transfer $10 from account1 to account2, we have to:
 
 **Transactions need to satisfy the ACID properties in order to achieve its purpose:**
 1. **Atomicity**: Either all the operations complete successfully or the transactions fail and the db is unchanged
-2. **Consistency**: The db state must valid after every transaction. All constraints must be satisfied
+2. **Consistency**: The db state must be valid after every transaction. All constraints must be satisfied
 3. **Isolation**: Concurrent transactions must not affect each other
 4. **Durabiltiy**: Data successfully written by a transaction must be recorded in a persistent storage
 
