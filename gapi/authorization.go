@@ -21,7 +21,7 @@ func (server *Server) authorizeUser(ctx context.Context) (*token.Payload, error)
 	}
 
 	values := md.Get(authorizationHeader)
-	if len(values) > 0 {
+	if values == nil {
 		return nil, fmt.Errorf("missing authorization header")
 	}
 
