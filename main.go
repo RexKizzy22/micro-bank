@@ -11,8 +11,8 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/Rexkizzy22/micro-bank/api"
-	"github.com/Rexkizzy22/micro-bank/docs"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
 	"github.com/Rexkizzy22/micro-bank/pb"
@@ -55,11 +55,11 @@ func main() {
 	store := db.NewStore(conn)
 
 	// Run HTTP server
-	// runGinServer(config, store)
+	runGinServer(config, store)
 
 	// Run gRPC-Gateway & gRPC servers
-	go runGatewayServer(config, store)
-	runGrpcServer(config, store)
+	// go runGatewayServer(config, store)
+	// runGrpcServer(config, store)
 }
 
 func runMigration(migrationURL string, dbSource string) {
