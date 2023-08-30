@@ -5,7 +5,7 @@
 #   namespace: kube-system
 # data:
 #   mapUsers: |
-#     - userarn: arn:aws:iam::335858042864:user/github-ci
-#       username: github-ci
+#     - userarn: arn:aws:iam::735737736227:user/microbank
+#       username: microbank
 #       groups:
 #         - system:masters

@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "rpc_create_user.proto";
 import "rpc_update_user.proto";
 import "rpc_login_user.proto";
+import "rpc_verify_email.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/Rexkizzy22/micro-bank/pb";
@@ -51,8 +52,18 @@ service MicroBank {
          body: "*"
       };
       option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-         description: "Use this to log in an existing user";
+         description: "Use this to log in an existing user and get access token and refresh token";
          summary: "Log new user";
+      };
+   }
+   rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse) {
+      option (google.api.http) = {
+         post: "/v1/verify_email",
+         body: "*"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+         description: "Use this to verify email of a new user";
+         summary: "Verify new user";
       };
    }
 }

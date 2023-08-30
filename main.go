@@ -7,15 +7,18 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/hibiken/asynq"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
 	"github.com/Rexkizzy22/micro-bank/api"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
-	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
+	"github.com/Rexkizzy22/micro-bank/mail"
 	"github.com/Rexkizzy22/micro-bank/pb"
+	docs "github.com/Rexkizzy22/micro-bank/swagger"
+	"github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -28,9 +31,9 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
-// @securitydefinitions.apiKey ApiAuthKey
-// @in                         header
-// @name                       Authorization
+// @securitydefinitions.apiKey  ApiAuthKey
+// @in                          header
+// @name                        Authorization
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
@@ -54,12 +57,21 @@ func main() {
 
 	store := db.NewStore(conn)
 
+	// setup redis queue for server integration
+	redisOpt := asynq.RedisClientOpt{
+		Addr: config.RedisAddress,
+	}
+	taskDistributor := task.NewRedisTaskDistributor(redisOpt)
+
+	// run redis task processor
+	go runTaskProcessor(config, &redisOpt, store)
+
 	// Run HTTP server
-	runGinServer(config, store)
+	// runGinServer(config, store)
 
 	// Run gRPC-Gateway & gRPC servers
-	// go runGatewayServer(config, store)
-	// runGrpcServer(config, store)
+	go runGatewayServer(config, store, taskDistributor)
+	runGrpcServer(config, store, taskDistributor)
 }
 
 func runMigration(migrationURL string, dbSource string) {
@@ -73,6 +85,16 @@ func runMigration(migrationURL string, dbSource string) {
 	}
 
 	log.Info().Msg("db migrated successfully")
+}
+
+func runTaskProcessor(config util.Config, redisOpt *asynq.RedisClientOpt, store db.Store) {
+	mailer := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskProcessor := task.NewRedisTaskProcessor(redisOpt, store, mailer)
+	log.Info().Msg("starting task processor")
+	err := taskProcessor.Start()
+	if err != nil {
+		log.Err(err).Msg("failed to start task processor")
+	}
 }
 
 // RUN HTTP SERVER
@@ -92,16 +114,16 @@ func runGinServer(config util.Config, store db.Store) {
 
 // programmatically setting general swagger info
 func setSwagger(config util.Config) {
-	docs.SwaggerInfo.Title = "Micro Bank Rest API"
-	docs.SwaggerInfo.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
-	docs.SwaggerInfo.Version = "1.0.0"
-	docs.SwaggerInfo.Host = config.HTTP_ServerAddress
-	docs.SwaggerInfo.BasePath = "/"
-	docs.SwaggerInfo.Schemes = []string{"http"}
+	docs.SwaggerInfo_swagger.Title = "Micro Bank Rest API"
+	docs.SwaggerInfo_swagger.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
+	docs.SwaggerInfo_swagger.Version = "1.0.0"
+	docs.SwaggerInfo_swagger.Host = config.HTTP_ServerAddress
+	docs.SwaggerInfo_swagger.BasePath = "/"
+	docs.SwaggerInfo_swagger.Schemes = []string{"http"}
 }
 
-func runGrpcServer(config util.Config, store db.Store) {
-	server, err := gapi.NewServer(config, store)
+func runGrpcServer(config util.Config, store db.Store, taskDistributor task.TaskDistributor) {
+	server, err := gapi.NewServer(config, store, taskDistributor)
 	if err != nil {
 		log.Fatal().Msgf("cannot create server: %s", err)
 	}
@@ -124,8 +146,8 @@ func runGrpcServer(config util.Config, store db.Store) {
 	}
 }
 
-func runGatewayServer(config util.Config, store db.Store) {
-	server, err := gapi.NewServer(config, store)
+func runGatewayServer(config util.Config, store db.Store, taskDistributor task.TaskDistributor) {
+	server, err := gapi.NewServer(config, store, taskDistributor)
 	if err != nil {
 		log.Fatal().Msgf("cannot create server: %s", err)
 	}

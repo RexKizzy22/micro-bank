@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/Rexkizzy22/micro-bank/pb";
+
+message VerifyEmailRequest {
+   string secret_code = 1;
+   int64 email_id = 2;
+}
+
+message VerifyEmailResponse {
+    bool is_verified = 1;
+}

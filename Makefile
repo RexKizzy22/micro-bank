@@ -3,6 +3,11 @@ setup:
 	setenv DOCKER_DB_URL "$(DOCKER_DB_URL)" 
 	setenv AWS_RDS_DB_URL "$(AWS_RDS_DB_URL)"
 	setenv ECR_URL "$(ECR_URL)"
+	setenv PG_CONTAINER_NAME "$(PG_CONTAINER_NAME)"
+	setenv PG_IMAGE "$(PG_IMAGE)"
+	setenv POSTGRES_PASSWORD "$(POSTGRES_PASSWORD)"
+	setenv POSTGRES_USER "$(POSTGRES_USER)"
+	setenv FILE_NAME "$(FILE_NAME)"
 
 # start local server
 server: swag
@@ -12,7 +17,7 @@ server: swag
 
 # create a migration file
 migration:
-	migrate create -dir db/migration -ext sql -seq <filename>
+	migrate create -dir db/migration -ext sql -seq $(FILE_NAME)
 
 # generate REST API docs from the available services' docstrings
 swag:
@@ -23,72 +28,76 @@ randkey:
 
 # run postgres container using postgres official image
 postgres:
-	docker run --name=postgres14 -p 5430:5432 \
-		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+	docker run --name=$(PG_CONTAINER_NAME) -p 5432:5432 \
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d $(PG_CONTAINER_NAME)
 
 # stop running container instance of the postgres image
 stop-postgres:
-	docker stop postgres14
+	docker stop $(PG_CONTAINER_NAME)
+
+# start stopped container instance of the postgres image
+start-postgres:
+	docker start $(PG_CONTAINER_NAME)
 
 # remove stopped container instance of the postgres image
 rm-postgres:
-	docker rm postgres14
+	docker rm $(PG_CONTAINER_NAME)
 
-# Connect postgres container to MicroBank server using a common container network
-postgres-dock:
-	# docker run --name=postgres14 --network bank-network -p 5432:5432 \
-		-e GIN_MODE=release -e POSTGRES_PASSWORD=MicroBank -e POSTGRES_USER=postgres -d postgres:14-alpine
+# Connect postgres container to microbank server using a common container network
+postgres-dk:
+	# docker run --name=postgres15 --network bank-network -p 5430:5432 \
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d $(PG_CONTAINER_NAME)
 
 # create a new database in postgres container
 createdb:
-	docker exec -it postgres14 createdb --username=postgres --owner=postgres microbank
+	docker exec -it $(PG_CONTAINER_NAME) createdb --username=postgres --owner=postgres microbank
 
 # delete the database in postgres container
 dropdb:
-	docker exec -it postgres14 dropdb --username=postgres microbank
+	docker exec -it $(PG_CONTAINER_NAME) dropdb --username=postgres microbank
 
 # run database queries in postgres container
 querydb:
-	docker exec -it postgres14 psql -U postgres microbank
+	docker exec -it $(PG_CONTAINER_NAME) psql -U postgres microbank
 
-# Connect to the local database
+# migration with local database
 migrateup:
-	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up
-
-migrateup1:
-	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose up 1
+	migrate -path db/migration -database $(LOCAL_DB_URL) -verbose up
 
 migratedown:
-	migrate -path db/migration -database "$(LOCAL_DB_URL)" -verbose down
+	migrate -path db/migration -database $(LOCAL_DB_URL) -verbose down
+
+migrateup1:
+	migrate -path db/migration -database $(LOCAL_DB_URL) -verbose up 1
 
 migratedown1:
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
+	migrate -path db/migration -database $(LOCAL_DB_URL) -verbose down 1
 
-# Connect between the database container and the app container
-migrateup-dock:
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up
+# migration with docker compose
+migrateup-dk:
+	migrate -path db/migration -database $(DOCKER_DB_URL) -verbose up
 
-migrateup1-dock:
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose up 1
+migratedown-dk:
+	migrate -path db/migration -database $(DOCKER_DB_URL) -verbose down
 
-migratedown-dock:
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down
+migrateup1-dk:
+	migrate -path db/migration -database $(DOCKER_DB_URL) -verbose up 1
 
-migratedown1-dock:
-	migrate -path db/migration -database "$(DOCKER_DB_URL)" -verbose down 1
+migratedown1-dk:
+	migrate -path db/migration -database $(DOCKER_DB_URL) -verbose down 1
 
-# Connect to the remote database on AWS RDS
-migrateup-remote:
-	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up
+# migration with remote database on AWS RDS
+migrateup-rmt:
+	migrate -path db/migration -database $(AWS_RDS_DB_URL) -verbose up
 
-migrateup1-remote:
-	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose up 1
+migratedown-rmt:
+	migrate -path db/migration -database $(AWS_RDS_DB_URL) -verbose down
 
-migratedown-remote:
-	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down
+migrateup1-rmt:
+	migrate -path db/migration -database $(AWS_RDS_DB_URL) -verbose up 1
 
-migratedown1-remote:
-	migrate -path db/migration -database "$(AWS_RDS_DB_URL)" -verbose down 1
+migratedown1-rmt:
+	migrate -path db/migration -database $(AWS_RDS_DB_URL) -verbose down 1
 
 # Generate models from sql queries and as well generate repositories to communicate with the database
 sqlc:
@@ -96,7 +105,7 @@ sqlc:
 
 # Run all test, output verbose logs and output coverage information
 test:
-	go test -v -cover ./...
+	go test -v -cover -short ./...
 
 # Generate database mock utilities for testing
 mock:
@@ -125,12 +134,13 @@ k8scontext:
 # Compile the gRPC interface definition language and serve assets from a statik server
 proto:
 	rm -f pb/*.go
+	rm -f gapi/docs/swagger/*.swagger.yaml
 	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
     --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
 	--grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
-    --openapiv2_out=gapi/doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=microbank,output_format=yaml \
+    --openapiv2_out=gapi/docs/swagger --openapiv2_opt=allow_merge=true,merge_file_name=microbank,output_format=yaml \
 	proto/*.proto
-	statik -src=./gapi/doc/swagger -dest=./gapi
+	statik -src=./gapi/docs/swagger -dest=./gapi
 
 # run gRPC calls using Evans client
 evans:
@@ -138,10 +148,13 @@ evans:
 
 # generate database documentation using dbdiagram.io CLI
 db_doc:
-	dbdocs build schema/microbank.dbml
+	dbdocs build db/microbank.dbml
 
 # generate database schema from schema design tool by dbdiagram.io
 db_schema:
-	dbml2sql --postgres -o schema/microbank.sql schema/microbank.dbml
+	dbml2sql --postgres -o db/microbank.sql db/microbank.dbml
+
+redis:
+	docker run --name redis -p 6379:6379 -d redis:7.2-alpine
 
 .PHONY: postgres createdb dropdb querydb migrateup migrateup1 migratedown migratedown1 migrateup-dock migrateup1-dock migratedown-dock migratedown1-dock migrateup-remote migrateup1-remote migratedown-remote migratedown1-remote sqlc test server swag proto evans db_doc db_schema awsecrlogin awssecrets awscurrentuser kubeconfig k8scontext
