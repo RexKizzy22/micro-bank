@@ -1,5 +1,5 @@
 .env
 *.log
 zsh.txt
-docs/
+swagger/
 build.yaml
