@@ -1,5 +1,4 @@
 .env
 *.log
 zsh.txt
-docs/
 build.yaml
