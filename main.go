@@ -17,7 +17,7 @@ import (
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
 	"github.com/Rexkizzy22/micro-bank/mail"
 	"github.com/Rexkizzy22/micro-bank/pb"
-	docs "github.com/Rexkizzy22/micro-bank/swagger"
+	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang-migrate/migrate/v4"
