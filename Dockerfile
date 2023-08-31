@@ -1,5 +1,5 @@
 # Build Stage
-FROM golang:1.19-alpine3.16 AS builder
+FROM golang:1.20-alpine AS builder
 
 WORKDIR /app 
 
@@ -13,7 +13,7 @@ COPY . .
 RUN go build -o main main.go 
 
 # Run Stage 
-FROM alpine:3.16
+FROM alpine:3.18
 
 RUN addgroup app && adduser -S -G app app
 

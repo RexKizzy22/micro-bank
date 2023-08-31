@@ -201,7 +201,7 @@ To transfer $10 from account1 to account2, we have to:
 
 **Why we need database transactions**
 - To provide reliable and consistent unit of work, even in case of system failures
-- To provide isolation between prograns that access the database concurrently
+- To provide isolation between programs that access the database concurrently
 
 **Transactions need to satisfy the ACID properties in order to achieve its purpose:**
 1. **Atomicity**: Either all the operations complete successfully or the transactions fail and the db is unchanged

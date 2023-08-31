@@ -16,6 +16,7 @@
 #     spec:
 #       containers:
 #       - name: microbank-api
-#         image: nginx:1.14.2 # TODO: use ECR image instead
+#         image: nginx:1.14.2 # TODO: use ECR image instead with tag :latest
+#         imagePullPolicy: Always
 #         ports:
 #         - containerPort: 8080

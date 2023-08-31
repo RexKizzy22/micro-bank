@@ -33,7 +33,6 @@ func TestTransferTx(t *testing.T) {
 			errs <- err
 			results <- result
 		}()
-
 	}
 
 	// test result or error of each transfer transaction performed in n goroutines
@@ -129,9 +128,10 @@ func TestTransferTxDeadlock(t *testing.T) {
 	n := 10
 	amount := int64(10)
 
+	fromAccountID := account1.ID
+	toAccountID := account2.ID
+
 	for i := 0; i < n; i++ {
-		fromAccountID := account1.ID
-		toAccountID := account2.ID
 
 		if i%2 == 1 {
 			fromAccountID = account2.ID
@@ -155,10 +155,10 @@ func TestTransferTxDeadlock(t *testing.T) {
 		require.NoError(t, err)
 
 		// TODO: check the final updated account
-		// updatedAccount1, err := testQueries.GetAccount(context.Background(), fromAccountID.ID)
+		// updatedAccount1, err := testQueries.GetAccount(context.Background(), fromAccountID)
 		// require.NoError(t, err)
 
-		// updatedAccount2, err := testQueries.GetAccount(context.Background(), toAccount.ID)
+		// updatedAccount2, err := testQueries.GetAccount(context.Background(), toAccountID)
 		// require.NoError(t, err)
 
 		// fmt.Println(">>>>after transfer", updatedAccount1.Balance, updatedAccount2.Balance)

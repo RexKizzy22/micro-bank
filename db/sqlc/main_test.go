@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/Rexkizzy22/micro-bank/util"
+	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
@@ -26,6 +27,7 @@ func TestMain(m *testing.M) {
 
 	testQueries = New(testDB)
 
+	gin.SetMode(gin.TestMode)
 	os.Exit(m.Run())
 }
 

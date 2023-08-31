@@ -1,0 +1,52 @@
+# apiVersion: networking.k8s.io/v1
+# kind: IngressClass
+# metadata:
+#   name: nginx
+# spec:
+#   controller: k8s.io/ingress.nginx
+
+# HTTP
+# --- 
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: microbank.org
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: "api.microbank.org"
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: microbank-api-service
+#             port:
+#               number: 80
+
+# HTTPS
+--- 
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: microbank.org
+#   annotations:
+#     cert-manager.io/cluster-issuer: letsencrypt
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: "api.microbank.org"
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: "/"
+#         backend:
+#           service:
+#             name: microbank-api-service
+#             port:
+#               number: 80
+#   tls:
+#   - hosts:
+#     - api.microbank.org
+#     secretName: microbank

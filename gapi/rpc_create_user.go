@@ -2,11 +2,14 @@ package gapi
 
 import (
 	"context"
+	"time"
 
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/pb"
+	"github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/Rexkizzy22/micro-bank/validation"
+	"github.com/hibiken/asynq"
 	"github.com/lib/pq"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -23,14 +26,28 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)
 	}
 
-	arg := db.CreateUserParams{
-		Username:       req.GetUsername(),
-		FullName:       req.GetFullName(),
-		Email:          req.GetEmail(),
-		HashedPassword: hashPassword,
+	arg := db.CreateUserTxParams{
+		CreateUserParams: db.CreateUserParams{
+			Username:       req.GetUsername(),
+			FullName:       req.GetFullName(),
+			Email:          req.GetEmail(),
+			HashedPassword: hashPassword,
+		},
+		AfterCreate: func(user db.User) error {
+			taskPayload := &task.EmailVerificationPayload{
+				Username: user.Username,
+			}
+
+			opts := []asynq.Option{
+				asynq.MaxRetry(10),
+				asynq.ProcessIn(10 * time.Second),
+				asynq.Queue(task.QueueCritical),
+			}
+			return server.taskDistributor.DistributeTaskSendVerifyEmail(ctx, taskPayload, opts...)
+		},
 	}
 
-	user, err := server.store.CreateUser(ctx, arg)
+	txResult, err := server.store.CreateUserTx(ctx, arg)
 	if err != nil {
 		if pErr, ok := err.(*pq.Error); ok {
 			switch pErr.Code.Name() {
@@ -40,8 +57,9 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		}
 		return nil, status.Errorf(codes.Internal, "failed to create user: %s", err)
 	}
+
 	resp := &pb.CreateUserResponse{
-		User: converter(user),
+		User: converter(txResult.User),
 	}
 
 	return resp, nil
