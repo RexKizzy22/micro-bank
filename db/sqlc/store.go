@@ -30,9 +30,7 @@ func NewStore(db *sql.DB) Store {
 
 // executes a function within a transaction
 func (s *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
-	tx, err := s.db.BeginTx(ctx, &sql.TxOptions{
-		Isolation: 6,
-	})
+	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
