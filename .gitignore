@@ -1,4 +1,5 @@
 .env
 *.log
 zsh.txt
+gapi/docs/
 build.yaml
