@@ -17,7 +17,7 @@ The first step is designing a SQL database schema using [dbdiagram.io](https://d
 DB Diagram is a tool that enables us to save and share the database schema as a PDF/PNG diagram with others in the team.
 
 
-## GENERATING CRUD CODE
+## GENERATING CRUD **CODE**
 
 We use code generation tools to generate code to run CRUD operations that interact 
 with the database (serves as a repository pattern), we can create a schema in a target
@@ -66,14 +66,10 @@ Pros:
 
 - Uses the database/sql library under the hood
 - Very fast and easy to use
-- Uses the database/sql standard library
 - Automatic code generation from manually written sql queries
 - Evaluates the sql queries before generating code therefore errors are caught at compile time
-- Generates `Querier` structs that makes it easy to mock the various database operations during testing
-
-Cons:
-
-- Only fully supports Postgres. MySQL is still experimental
+- Generates `Querier` interface that makes it easy to mock the various database operations during testing
+- It supports PostgreSQL, MySQL, and SQLite databases
   
 
 ## DATABASE MIGRATION
@@ -131,7 +127,10 @@ serve client assets as well.
 Microbank uses [**Viper**](https://github.com/viper), a robust configuration 
 tool for managing configuration assets in local and remote environments
 
-**Token-Based Authentication - Paseto over JWT**
+
+## AUTHENTICATION
+
+### Token-Based Authentication - Paseto over JWT
 
 - JSON Web Token **(JWT)** Authentication is not an entirely secure form of authentication
    - JWT gives developers too many hashing algorithms to choose from
@@ -153,7 +152,9 @@ following reasons:
   - Everything is authenticated
   - Encrypted payload for local use **(symmetric key)**
 
-## UNIT TESTING
+
+## TESTING
+### UNIT TESTING
 
 Golang was designed with unit testing in mind therefore making it part of the language binary. 
 It has a robust unit testing convention where a ```TestMain``` function defined for each package 
@@ -168,7 +169,7 @@ The [testify library](https://github.com/stretchr/testify) has several sub-packa
  testing utilities. We make use of the ```require``` sub-package which serves as a test-assertion 
  utility in this project. It is a mature and easy to use library.
 
-## MOCKDB FOR UNIT TESTING
+### MOCKDB FOR UNIT TESTING
 
 It is usually preferable to use a mock database to test all endpoints of an application. The benefits are:
 
@@ -181,11 +182,19 @@ All that is required is for the mock DB to implement the same interface as the r
 
 There are 2 ways to mock a database:
 1. Use a fake DB (MEMORY) - implement a fake version of DB; store data in memory.
-   - This is easy to implement but requires us to write more code which is time consuming for both development and maintenance.
+   - This is easy to implement using ```sync.Map``` but requires us to write more code which is time consuming for both development and maintenance.
 2. Use DB stubs ([GOMOCK](https://github.com/golang/mock)) - Generate and build DB stubs that return hard-coded values
 
 We use the db stubs in this project and write our unit tests in a table-driven manner 
-to make the tests robust and more systematic
+to make the tests robust and more systematic. Test cases for the test tables are typically modelled as such:
+```go
+[]struct {
+   name          string
+   req           RequestModel
+   buildStubs    func(...ServerInfraInterfaces)
+   checkResponse func(t *testing.T, resp ResponseModel, err error)
+}
+```
 
 
 ## TRANSACTIONS
@@ -214,7 +223,7 @@ To transfer $10 from account1 to account2, we have to:
 - Read Uncommitted: Transactions can see data written by other uncommitted transactions
 - Read Committed: Transactions can only see data written by other committed transactions
 - Repeatable Read: Same read query always returns same results
-- Serializable: Can achieve same result if execute transactions serially in some order instead of concurrently
+- Serializable: Can achieve same result if we execute transactions serially in some order instead of concurrently
 
 **These levels are usually associated with 4 read phenomena:**
 

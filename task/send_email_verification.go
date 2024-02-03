@@ -2,7 +2,6 @@ package task
 
 import (
 	"context"
-	// "database/sql"
 	"encoding/json"
 	"fmt"
 
@@ -50,15 +49,15 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 
 	user, err := processor.store.GetUser(ctx, payload.Username)
 	if err != nil {
-		// if err == sql.ErrNoRows {
+		// if errors.Is(err, db.ErrorNotFound) {
 		// 	return fmt.Errorf("user does not exist: %w", asynq.SkipRetry)
 		// }
 		return fmt.Errorf("failed to get user: %w", asynq.SkipRetry)
 	}
 
 	verifyEmail, err := processor.store.CreateVerifyEmail(ctx, db.CreateVerifyEmailParams{
-		Username: user.Username,
-		Email: user.Email,
+		Username:   user.Username,
+		Email:      user.Email,
 		SecretCode: util.RandomString(32),
 	})
 	if err != nil {
@@ -66,7 +65,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 	}
 
 	subject := "Welcome to Microbank"
-	// TODO: change email url to a frontend url
+	// TODO: change verify email url to a frontend url
 	verifyEmailURL := fmt.Sprintf(`http://localhost:8080/verify_email?email_id=%d&secret_code=%s`, verifyEmail.ID, verifyEmail.SecretCode)
 	to := []string{user.Email}
 	content := fmt.Sprintf(`Hello %s, <br />

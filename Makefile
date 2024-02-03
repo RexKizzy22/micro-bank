@@ -10,8 +10,8 @@ setup:
 	setenv FILE_NAME "$(FILE_NAME)"
 
 # start local server
-server: swag
-	swag fmt
+server:
+	# swag fmt
 	go fmt ./...
 	gow run main.go
 
@@ -23,13 +23,14 @@ migration:
 swag:
 	swag init
 
+# generate a random string with 32 characters
 randkey:
 	openssl rand -hex 64 | head -c 32
 
 # run postgres container using postgres official image
 postgres:
 	docker run --name=$(PG_CONTAINER_NAME) -p 5432:5432 \
-		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d $(PG_CONTAINER_NAME)
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d postgres:15-alpine
 
 # stop running container instance of the postgres image
 stop-postgres:
@@ -46,7 +47,7 @@ rm-postgres:
 # Connect postgres container to microbank server using a common container network
 postgres-dk:
 	# docker run --name=postgres15 --network bank-network -p 5430:5432 \
-		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d $(PG_CONTAINER_NAME)
+		-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d postgres:15-alpine
 
 # create a new database in postgres container
 createdb:
@@ -110,10 +111,11 @@ test:
 # Generate database mock utilities for testing
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
+	mockgen -package mockwk -destination task/mock/distributor.go github.com/Rexkizzy22/micro-bank/task TaskDistributor
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container
 awsecrlogin:
-	aws ecr get-login-password | docker login --username AWS --password-stdin "$(ECR_URL)"
+	aws ecr get-login-password | docker login --username AWS --password-stdin$(ECR_URL)
 
 # Retrieve secrets from AWS Secret Manager and save them to app.env
 awssecrets:

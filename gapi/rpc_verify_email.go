@@ -17,7 +17,7 @@ func (server *Server) VerifyEmail(ctx context.Context, req *pb.VerifyEmailReques
 	}
 
 	txResult, err := server.store.VerifyEmailTx(ctx, db.VerifyEmailTxParams{
-		EmailId: req.EmailId,
+		EmailId:    req.EmailId,
 		SecretCode: req.SecretCode,
 	})
 	if err != nil {

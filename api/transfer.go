@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
@@ -71,7 +70,7 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 func (server *Server) validAccountCurrency(ctx *gin.Context, accountID int64, currency string) (db.Account, bool) {
 	account, err := server.store.GetAccount(ctx, accountID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, db.ErrorNotFound) {
 			ctx.JSON(http.StatusNotFound, nil)
 			return account, false
 		}

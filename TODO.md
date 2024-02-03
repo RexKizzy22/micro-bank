@@ -11,15 +11,21 @@
 
 ## Deployment Strategy
 
-- Use AWS
-- Provision cluster
-- Provision node group
-- Update kubeconfig to use AWS credentials
-- Apply deployment, service, ingress and ingress class
-- Purchase domain from Route53
-- Create DNS record type of A record
-- Set up SSL/TLS certificate with letsencrypt
+1. Using GCP App Engine
 
+   - Create app.yaml
+   - Create service account on GCP
+   - Deploy
+
+2. Using kubernetes
+   - Use AWS
+   - Provision cluster
+   - Provision node group
+   - Update kubeconfig to use AWS credentials
+   - Apply deployment, service, ingress and ingress class
+   - Purchase domain from Route53
+   - Create DNS record type of A record
+   - Set up SSL/TLS certificate with letsencrypt
 
 ## Configure Automatic TLS Certificate Management
 

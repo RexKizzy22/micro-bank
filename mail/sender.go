@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	smtpAuthAddress = "smtp.gmail.com"
-	smtpAuth = "smtp.gmail.com:587"
+	smtpAuthAddress   = "smtp.gmail.com"
+	smtpServerAddress = "smtp.gmail.com:587"
 )
 
 type EmailSender interface {
@@ -24,42 +24,42 @@ type EmailSender interface {
 }
 
 type GmailSender struct {
-	name string
-	fromEmailAddress string
+	name              string
+	fromEmailAddress  string
 	fromEmailPassword string
 }
 
 func NewGmailSender(name string, fromEmailAddress string, fromEmailPassword string) EmailSender {
 	return &GmailSender{
-		name: name,
-		fromEmailAddress: fromEmailAddress,
+		name:              name,
+		fromEmailAddress:  fromEmailAddress,
 		fromEmailPassword: fromEmailPassword,
-	}	
+	}
 }
 
 func (sender *GmailSender) SendEmail(
-		subject string,
-		content string,
-		to []string,
-		cc []string,
-		bcc []string,
-		attachFiles []string,
-	) error {
-		e := email.NewEmail()
-		e.From = fmt.Sprintf("%s <%s>", sender.name, sender.fromEmailAddress)
-		e.Subject = subject
-		e.Cc = cc
-		e.Bcc = bcc
-		e.To = to
-		e.HTML = []byte(content)
+	subject string,
+	content string,
+	to []string,
+	cc []string,
+	bcc []string,
+	attachFiles []string,
+) error {
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("%s <%s>", sender.name, sender.fromEmailAddress)
+	e.Subject = subject
+	e.Cc = cc
+	e.Bcc = bcc
+	e.To = to
+	e.HTML = []byte(content)
 
-		for _, f := range attachFiles {
-			_, err := e.AttachFile(f)
-			if err != nil {
-				return fmt.Errorf("failed to attach file %s: %w", f, err)
-			}
+	for _, f := range attachFiles {
+		_, err := e.AttachFile(f)
+		if err != nil {
+			return fmt.Errorf("failed to attach file %s: %w", f, err)
 		}
-
-		smtpAuth := smtp.PlainAuth("", sender.name, sender.fromEmailPassword, smtpAuthAddress)
-		return e.Send(smtpAuthAddress, smtpAuth)
 	}
+
+	smtpAuth := smtp.PlainAuth("", sender.name, sender.fromEmailPassword, smtpAuthAddress)
+	return e.Send(smtpServerAddress, smtpAuth)
+}

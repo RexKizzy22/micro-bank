@@ -11,7 +11,6 @@ import (
 type Config struct {
 	AppEnv               string        `mapstructure:"APP_ENV"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
-	DBDriver             string        `mapstructure:"DB_DRIVER"`
 	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	RedisAddress         string        `mapstructure:"REDIS_ADDRESS"`
 	HTTP_ServerAddress   string        `mapstructure:"HTTP_SERVER_ADDRESS"`
@@ -19,9 +18,9 @@ type Config struct {
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
-	EmailSenderName string `mapstructure:"EMAIL_SENDER_NAME"`
-	EmailSenderPassword string `mapstructure:"EMAIL_SENDER_PASSWORD"`
-	EmailSenderAddress string `mapstructure:"EMAIL_SENDER_Address"`
+	EmailSenderName      string        `mapstructure:"EMAIL_SENDER_NAME"`
+	EmailSenderPassword  string        `mapstructure:"EMAIL_SENDER_PASSWORD"`
+	EmailSenderAddress   string        `mapstructure:"EMAIL_SENDER_Address"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -34,7 +33,6 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.AutomaticEnv()
 
 	viper.SetDefault("PROD_DB_SOURCE", "")
-	viper.SetDefault("PROD_DB_DRIVER", "")
 	viper.SetDefault("APP_ENV", "")
 
 	err = viper.ReadInConfig()
@@ -48,20 +46,11 @@ func LoadConfig(path string) (config Config, err error) {
 
 func (config *Config) FetchDBSource() string {
 	env := viper.GetString("APP_ENV")
-	remoteDB := viper.GetString("PROD_DB_SOURCE")
+	remoteDBConnectionString := viper.GetString("PROD_DB_SOURCE")
+
 	if env == "production" {
-		return remoteDB
+		return remoteDBConnectionString
 	} else {
 		return config.DBSource
-	}
-}
-
-func (config *Config) FetchDBDriver() string {
-	env := viper.GetString("APP_ENV")
-	remoteDBDRIVER := viper.GetString("PROD_DB_DRIVER")
-	if env == "production" {
-		return remoteDBDRIVER
-	} else {
-		return config.DBDriver
 	}
 }

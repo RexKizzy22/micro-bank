@@ -1,12 +1,20 @@
-version: 1
-packages:
-  - path: "./db/sqlc"
-    name: "db"
-    engine: "postgresql"
-    schema: "./db/migration"
+version: "2"
+sql:
+  - schema: "./db/migration"
     queries: "./db/query"
-    emit_json_tags: true
-    emit_interface: true
-    emit_prepared_queries: false 
-    emit_exact_table_names: false # sets the name of the generated struct to singular form even when the table name is pluralized
-    emit_empty_slices: true # sets the return value of a list/many query to an empty slice
+    engine: "postgresql"
+    gen:
+      go:
+        package: "db"
+        out: "./db/sqlc"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_interface: true
+        emit_prepared_queries: false
+        emit_exact_table_names: false # sets the name of the generated struct to singular form even when the table name is pluralized
+        emit_empty_slices: true # sets the return value of a list/many query to an empty slice
+        overrides:
+          - db_type: "uuid"
+            go_type: "github.com/google/uuid.UUID"
+          - db_type: "timestamptz"
+            go_type: "time.Time"
