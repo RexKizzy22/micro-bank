@@ -2,18 +2,19 @@ package db
 
 import (
 	"context"
-	"database/sql"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // contains the input parameters of the verify email transaction
 type VerifyEmailTxParams struct {
-	EmailId int64
+	EmailId    int64
 	SecretCode string
 }
 
 // result of verify email transaction
 type VerifyEmailTxResult struct {
-	User User
+	User        User
 	VerifyEmail VerifyEmail
 }
 
@@ -26,7 +27,7 @@ func (store *SQLStore) VerifyEmailTx(ctx context.Context, arg VerifyEmailTxParam
 		var err error
 
 		result.VerifyEmail, err = q.UpdateVerifyEmail(ctx, UpdateVerifyEmailParams{
-			ID: arg.EmailId,
+			ID:         arg.EmailId,
 			SecretCode: arg.SecretCode,
 		})
 		if err != nil {
@@ -34,8 +35,8 @@ func (store *SQLStore) VerifyEmailTx(ctx context.Context, arg VerifyEmailTxParam
 		}
 
 		result.User, err = q.UpdateUser(ctx, UpdateUserParams{
-			IsEmailVerified: sql.NullBool{
-				Bool: true,
+			IsEmailVerified: pgtype.Bool{
+				Bool:  true,
 				Valid: true,
 			},
 		})

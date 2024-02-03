@@ -11,14 +11,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
       
-
     services:
 
       postgres:
-        image: postgres:14
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: MicroBank
+          POSTGRES_PASSWORD: Microbank
           POSTGRES_DB: microbank
         ports:
           - 5432:5432

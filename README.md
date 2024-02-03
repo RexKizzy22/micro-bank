@@ -16,6 +16,7 @@
 
 * Download [Docker](https://www.docker.com/products/docker-desktop/)
 * Clone this repository
+* Comment out the environment variables for localhost and uncomment the ones for docker compose environment in app.env
 * Start services
 
 ```bash
@@ -30,17 +31,28 @@ docker-compose up --build
 3. [Go](https://go.dev/dl/)
 4. golang-migrate. Run `brew install golang-migrate`
 
-## Run HTTP server
+## Run gRPC Gateway server
+* Comment out the environment variables for docker environment and uncomment the ones for localhost in app.env
+* Download all dependencies
+
+```bash
+go mod download
+```
 
 * Start postgresql server
 
 ```bash
-brew services start postgresql
+make postgres PG_CONTAINER_NAME=<name>
 ```
-* Download all dependencies
-
+* Create microbank database
+  
 ```bash
-go install
+make createdb
+```
+* Start redis server
+  
+```bash
+make redis 
 ```
 
 * Start server
@@ -48,11 +60,3 @@ go install
 make server
 ```
 * Call REST API using HTTP clients like Postman
-
-## Run gRPC Gateway & gRPC servers
-* Comment out line `58` in [main.go](main.go) file
-* Uncomment lines `61` and `62` in [main.go](main.go) file
-* (Re)Start server
-```bash
-make server
-```

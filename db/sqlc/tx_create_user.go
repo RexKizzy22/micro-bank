@@ -4,19 +4,18 @@ import (
 	"context"
 )
 
-// contains the input parameters of the transfer transaction
+// contains the input parameters of the create user transaction
 type CreateUserTxParams struct {
 	CreateUserParams
 	AfterCreate func(user User) error
 }
 
-// result of transfer transaction
+// result of create user transaction
 type CreateUserTxResult struct {
 	User User
 }
 
-// performs money transfer from one account to another
-// creates a transfer record, adds account entries and updates accounts' balance in a single transaction
+// creates a new user and enqueues an email verification task to the queue in one transaction
 func (store *SQLStore) CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error) {
 	var result CreateUserTxResult
 

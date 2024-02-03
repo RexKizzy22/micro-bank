@@ -1,18 +1,17 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"log"
 	"os"
 	"testing"
 
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var testQueries *Queries
-var testDB *sql.DB
+var testStore Store
 
 func TestMain(m *testing.M) {
 	config, err := util.LoadConfig("../..")
@@ -20,12 +19,12 @@ func TestMain(m *testing.M) {
 		log.Fatal("unable to load config: ", err)
 	}
 
-	testDB, err = sql.Open(config.DBDriver, config.DBSource)
+	connPool, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
 	}
 
-	testQueries = New(testDB)
+	testStore = NewStore(connPool)
 
 	gin.SetMode(gin.TestMode)
 	os.Exit(m.Run())

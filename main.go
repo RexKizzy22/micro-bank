@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"database/sql"
+	"errors"
 	"net"
 	"net/http"
 	"os"
@@ -11,20 +11,20 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/Rexkizzy22/micro-bank/api"
+	// "github.com/Rexkizzy22/micro-bank/api"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
+	// "github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
 	"github.com/Rexkizzy22/micro-bank/mail"
 	"github.com/Rexkizzy22/micro-bank/pb"
-	"github.com/Rexkizzy22/micro-bank/docs"
 	"github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rakyll/statik/fs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -45,9 +45,7 @@ func main() {
 	}
 
 	dbConnString := config.FetchDBSource()
-	dbDriver := config.FetchDBDriver()
-
-	conn, err := sql.Open(dbDriver, dbConnString)
+	conn, err := pgxpool.New(context.Background(), dbConnString)
 	if err != nil {
 		log.Fatal().Msgf("unable to connect to database: %s", err)
 	}
@@ -80,7 +78,7 @@ func runMigration(migrationURL string, dbSource string) {
 		log.Fatal().Msgf("cannot create migration instance: %s", err)
 	}
 
-	if err := migration.Up(); err != nil && err != migrate.ErrNoChange {
+	if err := migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		log.Fatal().Msgf("failed to run UP migration: %s", err)
 	}
 
@@ -98,29 +96,29 @@ func runTaskProcessor(config util.Config, redisOpt *asynq.RedisClientOpt, store 
 }
 
 // RUN HTTP SERVER
-func runGinServer(config util.Config, store db.Store) {
-	setSwagger(config)
+// func runGinServer(config util.Config, store db.Store) {
+// 	setSwagger(config)
 
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal().Msgf("cannot create server: %s", err)
-	}
+// 	server, err := api.NewServer(config, store)
+// 	if err != nil {
+// 		log.Fatal().Msgf("cannot create server: %s", err)
+// 	}
 
-	err = server.Start(config.HTTP_ServerAddress)
-	if err != nil {
-		log.Fatal().Msgf("unable to start server: %s", err)
-	}
-}
+// 	err = server.Start(config.HTTP_ServerAddress)
+// 	if err != nil {
+// 		log.Fatal().Msgf("unable to start server: %s", err)
+// 	}
+// }
 
 // programmatically setting general swagger info
-func setSwagger(config util.Config) {
-	docs.SwaggerInfo_swagger.Title = "Micro Bank Rest API"
-	docs.SwaggerInfo_swagger.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
-	docs.SwaggerInfo_swagger.Version = "1.0.0"
-	docs.SwaggerInfo_swagger.Host = config.HTTP_ServerAddress
-	docs.SwaggerInfo_swagger.BasePath = "/"
-	docs.SwaggerInfo_swagger.Schemes = []string{"http"}
-}
+// func setSwagger(config util.Config) {
+// 	docs.SwaggerInfo_swagger.Title = "Micro Bank Rest API"
+// 	docs.SwaggerInfo_swagger.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
+// 	docs.SwaggerInfo_swagger.Version = "1.0.0"
+// 	docs.SwaggerInfo_swagger.Host = config.HTTP_ServerAddress
+// 	docs.SwaggerInfo_swagger.BasePath = "/"
+// 	docs.SwaggerInfo_swagger.Schemes = []string{"http"}
+// }
 
 func runGrpcServer(config util.Config, store db.Store, taskDistributor task.TaskDistributor) {
 	server, err := gapi.NewServer(config, store, taskDistributor)
@@ -173,30 +171,30 @@ func runGatewayServer(config util.Config, store db.Store, taskDistributor task.T
 	}
 
 	// http network request handler
-	mux := http.NewServeMux()
-	handler := gapi.HTTPLogger(mux)
-	mux.Handle("/", handler)
-
+	httpMux := http.NewServeMux()
+	httpMux.Handle("/", grpcMux)
+	
 	// serves static swagger-ui assets from the gRPC static asset folder
 	// fs := http.FileServer(http.Dir("/gapi/swagger"))
 	// mux.Handle("/swagger/", http.StripPrefix("/swagger/", fs))
-
+	
 	statikFS, err := fs.New()
 	if err != nil {
 		log.Fatal().Msgf("failed to create statik asset server: %s", err)
 	}
-
+	
 	// serves static swagger assets from the statik server
 	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
-	mux.Handle("/swagger/", swaggerHandler)
-
+	httpMux.Handle("/swagger/", swaggerHandler)
+	
 	listener, err := net.Listen("tcp", config.HTTP_ServerAddress)
 	if err != nil {
 		log.Fatal().Msgf("cannot create listener: %s", err)
 	}
-
+	
 	log.Printf("start HTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	handler := gapi.HTTPLogger(httpMux)
+	err = http.Serve(listener, handler)
 	if err != nil {
 		log.Fatal().Msgf("unable to start HTTP gateway server: %s", err)
 	}

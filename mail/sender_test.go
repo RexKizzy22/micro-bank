@@ -7,11 +7,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSendEmailWithGmai(t *testing.T) {
+func TestSendEmailWithGmail(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
-	
+
 	config, err := util.LoadConfig("..")
 	require.NoError(t, err)
 
@@ -22,7 +22,7 @@ func TestSendEmailWithGmai(t *testing.T) {
 		<h1>A test mail</h1>
 		<p> This is a test mail from <a href="http://github.com/RexKizzy22" target="_blank">Kizito</a></p>
 	`
-	to := []string{"kizitoiriogbe@gmail.com"}
+	to := []string{"kizitoinegbenose@gmail.com"}
 	attachFiles := []string{"../NOTE.md"}
 
 	err = sender.SendEmail(subject, content, to, nil, nil, attachFiles)

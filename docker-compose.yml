@@ -1,15 +1,20 @@
 version: "3.8"
 
 services:
+  
+  redis:
+    image: redis:7-alpine
 
   postgres:
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     environment:
-      - POSTGRES_PASSWORD=MicroBank
+      - POSTGRES_PASSWORD=microBank
       - POSTGRES_USER=postgres
       - POSTGRES_DB=microbank
     ports:
       - 5432:5432
+    volumes:
+      - data-volume:/var/lib/postgresql/data
 
   api:
     build:
@@ -17,9 +22,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+      - 9090:9090
     environment:
-      - DB_SOURCE=postgresql://postgres:MicroBank@postgres:5432/microbank?sslmode=disable
+      - DB_SOURCE=postgresql://postgres:microBank@postgres:5432/microbank?sslmode=disable
+      - REDIS_ADDRESS=redis:6379
     depends_on:
       - postgres
+      - redis
     # entrypoint: [ "/wait-for.sh", "postgres:5432", "--", "/start.sh" ]
-    command: [ "/main" ]
+    command: [ "./main" ]
+
+volumes:
+  data-volume:
