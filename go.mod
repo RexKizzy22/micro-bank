@@ -1,6 +1,6 @@
 module github.com/Rexkizzy22/micro-bank
 
-go 1.20
+go 1.22
 
 require (
 	github.com/gin-gonic/gin v1.8.1

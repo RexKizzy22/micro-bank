@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Sat Feb  3 10:46:48 2024
+# Make data base, printed on Sat Apr 13 13:42:08 2024
 
 # Variables
 
@@ -27,6 +27,7 @@ VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
 # automatic
 @F = $(notdir $@)
 # makefile
+ 
 CURDIR := /Users/emmanuel/Desktop/home/golang/micro-bank
 # makefile
 SHELL = /bin/sh
@@ -47,19 +48,23 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/emmanuel/.volta/bin:/opt/homebrew/opt/postgresql@15/bin:/Users/emmanuel/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/emmanuel/.dotnet/tools:/Users/emmanuel/.dotnet/tools:/usr/local/smlnj/bin/
+PATH = /opt/homebrew/Cellar/pyenv-virtualenv/1.2.1/shims:/Users/emmanuel/.volta/bin:/opt/homebrew/opt/postgresql@15/bin:/Users/emmanuel/go/bin:/Users/emmanuel/.pyenv/shims:/Users/emmanuel/.pyenv/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/emmanuel/.dotnet/tools:/Users/emmanuel/.dotnet/tools:/usr/local/smlnj/bin/
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
 GOPATH = /Users/emmanuel/go
 # environment
+LaunchInstanceID = 9D9209E2-502E-4270-9010-11A489B51AA5
+# environment
 ELECTRON_RUN_AS_NODE = 1
+# environment
+PYENV_ROOT = /Users/emmanuel/.pyenv
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
 LS_COLORS = di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.q0iuHZdZhe/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.9tqmvu8pGw/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -73,15 +78,17 @@ MANPATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/D
 # environment
 GOMODCACHE = /Users/emmanuel/go/pkg/mod
 # environment
+PYENV_SHELL = zsh
+# environment
 HOME = /Users/emmanuel
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/8b3775030ed1a69b13e4f4c628c612102e30a681
+VSCODE_CODE_CACHE_PATH = /Users/emmanuel/Library/Application Support/Code/CachedData/5c3e652f63e798a5ac2f31ffd0d863669328dc4c
 # environment
 LOGNAME = emmanuel
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 ZSH = /Users/emmanuel/.oh-my-zsh
 # environment
@@ -117,7 +124,7 @@ TMPDIR = /var/folders/ww/0cclvqc57bl5whyqmc68h5440000gp/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.85-main.sock
+VSCODE_IPC_HOOK = /Users/emmanuel/Library/Application Support/Code/1.88-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -127,13 +134,11 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.63099175.63099181
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.71764240.71764246
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
-# environment
-VSCODE_L10N_BUNDLE_LOCATION = 
 # automatic
 +F = $(notdir $+)
 # environment
@@ -150,18 +155,22 @@ MAKEFILES :=
 PAGER = less
 # environment
 LC_ALL = C
+# environment
+SECURITYSESSIONID = 186b5
 # automatic
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
 # environment
+PYENV_VIRTUALENV_INIT = 1
+# environment
 MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 4734
+VSCODE_PID = 648
 # variable set hash-table stats:
-# Load=73/1024=7%, Rehash=0, Collisions=2/96=2%
+# Load=77/1024=8%, Rehash=0, Collisions=2/100=2%
 
 # Pattern-specific Variable Values
 
@@ -169,9 +178,9 @@ VSCODE_PID = 4734
 
 # Directories
 
-# . (device 16777231, inode 1095673): 34 files, no impossibilities.
+# . (device 16777231, inode 1095673): 35 files, no impossibilities.
 
-# 34 files, no impossibilities in 1 directories.
+# 35 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -306,7 +315,7 @@ start-postgres:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2024-02-03 10:26:53
+#  Last modified 2024-02-03 17:29:10
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -443,7 +452,7 @@ postgres-dk:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 49):
 	# docker run --name=postgres15 --network bank-network -p 5430:5432 \
-	-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d $(PG_CONTAINER_NAME)
+	-e GIN_MODE=release -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -e POSTGRES_USER=$(POSTGRES_USER) -d postgres:15-alpine
 	
 
 migratedown1-dock:
@@ -620,6 +629,6 @@ stop-postgres:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sat Feb  3 10:46:48 2024
+# Finished Make data base on Sat Apr 13 13:42:08 2024
 
  

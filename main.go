@@ -173,25 +173,25 @@ func runGatewayServer(config util.Config, store db.Store, taskDistributor task.T
 	// http network request handler
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", grpcMux)
-	
+
 	// serves static swagger-ui assets from the gRPC static asset folder
 	// fs := http.FileServer(http.Dir("/gapi/swagger"))
 	// mux.Handle("/swagger/", http.StripPrefix("/swagger/", fs))
-	
+
 	statikFS, err := fs.New()
 	if err != nil {
 		log.Fatal().Msgf("failed to create statik asset server: %s", err)
 	}
-	
+
 	// serves static swagger assets from the statik server
 	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
 	httpMux.Handle("/swagger/", swaggerHandler)
-	
+
 	listener, err := net.Listen("tcp", config.HTTP_ServerAddress)
 	if err != nil {
 		log.Fatal().Msgf("cannot create listener: %s", err)
 	}
-	
+
 	log.Printf("start HTTP gateway server at %s", listener.Addr().String())
 	handler := gapi.HTTPLogger(httpMux)
 	err = http.Serve(listener, handler)

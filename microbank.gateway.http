@@ -1,0 +1,127 @@
+@hostname = http://localhost:8080/v1
+
+
+# ========== Users ==================
+
+# @name create_user
+POST {{hostname}}/create_user
+Content-Type: application/json
+
+{
+    "username": "tracy",
+    "email": "tracy@gmail.com",
+    "full_name": "tracy earlyson",
+    "password": "tracy1111"
+}
+
+# Sample Create User Response
+# {
+#     "username": "mickey44",
+#     "full_name": "mickey corsey",
+#     "email": "mickey@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2022-07-20T17:03:48.413436Z"
+# }
+
+
+###
+
+
+# @name login_user
+GET {{hostname}}/user/login
+Content-Type: application/json
+
+{
+    "username": "tracy",
+    "password": "tracy1111"
+}
+
+// Sample Login Response
+# {
+#     "access_token": {{access_token}},
+#     "user": {
+#         "username": "mickey44",
+#         "full_name": "mickey corsey",
+#         "email": "mickey@gmail.com",
+#         "password_changed_at": "0001-01-01T00:00:00Z",
+#         "created_at": "2022-07-20T17:03:48.413436Z"
+#     }
+# }
+
+@access_token = {{login_user.response.headers.Authorization"}}
+
+
+###
+
+# ========= Accounts =============== 
+
+# @name create_account
+POST {{hostname}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "currency": "USD"
+}
+
+# Sample Create Account Response
+# {
+#     "id": 1,
+#     "owner": "mickey44",
+#     "balance": 0,
+#     "currency": "USD",
+#     "created_at": "2022-07-20T19:41:41.58767Z"
+# }
+
+
+###
+
+
+# @name account_transfer
+POST {{hostname}}/transfers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "currency": "USD",
+    "amount": 100,
+    "from_account_id": 3,
+    "to_account_id": 1
+}
+
+# Sample Transfer response
+# {
+#     "transfer": {
+#         "id": 1,
+#         "from_account_id": 3,
+#         "to_account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "from_account": {
+#         "id": 3,
+#         "owner": "justin24",
+#         "balance": -100,
+#         "currency": "USD",
+#         "created_at": "2022-07-21T08:26:08.397327Z"
+#     },
+#     "to_account": {
+#         "id": 1,
+#         "owner": "mickey44",
+#         "balance": 100,
+#         "currency": "USD",
+#         "created_at": "2022-07-20T19:41:41.58767Z"
+#     },
+#     "from_entry": {
+#         "id": 1,
+#         "account_id": 3,
+#         "amount": -100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "to_entry": {
+#         "id": 2,
+#         "account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     }
+# }
