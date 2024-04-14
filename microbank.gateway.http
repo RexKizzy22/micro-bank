@@ -1,0 +1,148 @@
+@hostname = http://localhost:8080/v1
+
+
+# ========== Users ==================
+
+# @name create_user
+POST {{hostname}}/create_user
+Content-Type: application/json
+
+{
+    "username": "tracy",
+    "email": "tracy@gmail.com",
+    "full_name": "tracy earlyson",
+    "password": "tracy1111"
+}
+
+# Sample Create User Response
+# {
+#     "username": "mickey44",
+#     "full_name": "mickey corsey",
+#     "email": "mickey@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2022-07-20T17:03:48.413436Z"
+# }
+
+
+###
+
+
+# @name login_user
+POST {{hostname}}/login_user
+Content-Type: application/json
+
+{
+    "username": "tracy",
+    "password": "tracy1111"
+}
+
+// Sample Login Response
+# {
+#   "user": {
+#     "username": "tracy",
+#     "full_name": "tracy earlyson",
+#     "email": "tracy@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2024-04-14T09:56:32.215188Z"
+#   },
+#   "session_id": {{session_id}},
+#   "access_token": {{access_token}},
+#   "refresh_token": {{refresh_token}},
+#   "access_token_expires_at": "2024-04-14T10:20:42.107118Z",
+#   "refresh_token_expires_at": "2024-04-15T10:05:42.107382Z"
+# }
+
+# {
+#   "user": {
+#     "username": "tracy",
+#     "full_name": "tracy earlyson",
+#     "email": "tracy@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2024-04-14T09:56:32.215188Z"
+#   },
+#   "session_id": "1671de1f-0487-4455-a001-4ab0e6d8225e",
+#   "access_token": "v2.local.otkihuLGG0v7tSwqgdxeCeVmw9nxIwas2Pg7hznE4_IQVRjAlp95DIFyYNRr3fWZcYZ-elB8ZJdDnlxtzSBap_XQO4I8y5tS8BBDJgJHh_TJrN8S9EVYaUruNGQzP9l2b3A0w9V2S2vbzkC6yea-_E6yE8YFlps6Qnbex5cGIAolUWRoETX-iy66PltonLNsHUdDd-T4Uy3S0PH2ofPJfgqfPqaU1dFWCZ4430AU2xD91Ox5nTg4IoQVFo5m1TR4XgAcGAm-mw.bnVsbA",
+#   "refresh_token": "v2.local.JLY0YOJHYFBTZ4-dRGX9c1Hurr7RSXRe7haRh4oypBYMBdqIrxXrrNZWkXO5WvKNNxtGqIpz7c3-UA9W0F_Rg4ZQGRXzCPH-pEkT71WfIwppFPr30Y_2WfNo3kxQLxAhhXvsHYSkqSGfM7Sanma7HVNZ12gssKvJRDld583EwLUs_GYk1QHiqrvrCD6lOMFd1ioLlLn2QMzFTcPYEBeFu0hJrm9aHMMnEzLlwVm30B0_LKMgLx47gT3tBdrRuSaczsBpqobYeQ.bnVsbA",
+#   "access_token_expires_at": "2024-04-14T10:20:42.107118Z",
+#   "refresh_token_expires_at": "2024-04-15T10:05:42.107382Z"
+# }
+
+@access_token = {{login_user.response.body.access_token}}
+@session_id = {{login_user.response.body.session_id}}
+@refresh_token = {{login_user.response.body.refresh_token}}
+
+
+###
+
+# ========= Accounts =============== 
+
+# @name create_account
+POST {{hostname}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "currency": "USD"
+}
+
+# Sample Create Account Response
+# {
+#     "id": 1,
+#     "owner": "mickey44",
+#     "balance": 0,
+#     "currency": "USD",
+#     "created_at": "2022-07-20T19:41:41.58767Z"
+# }
+
+
+###
+
+
+# @name account_transfer
+POST {{hostname}}/transfers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "currency": "USD",
+    "amount": 100,
+    "from_account_id": 3,
+    "to_account_id": 1
+}
+
+# Sample Transfer response
+# {
+#     "transfer": {
+#         "id": 1,
+#         "from_account_id": 3,
+#         "to_account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "from_account": {
+#         "id": 3,
+#         "owner": "justin24",
+#         "balance": -100,
+#         "currency": "USD",
+#         "created_at": "2022-07-21T08:26:08.397327Z"
+#     },
+#     "to_account": {
+#         "id": 1,
+#         "owner": "mickey44",
+#         "balance": 100,
+#         "currency": "USD",
+#         "created_at": "2022-07-20T19:41:41.58767Z"
+#     },
+#     "from_entry": {
+#         "id": 1,
+#         "account_id": 3,
+#         "amount": -100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "to_entry": {
+#         "id": 2,
+#         "account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     }
+# }

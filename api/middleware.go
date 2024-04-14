@@ -30,21 +30,21 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
-
+		
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationTypeBearer != authorizationType {
 			err := errors.New("invalid authorization type")
 			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
-
+		
 		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
 			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
-
+		
 		ctx.Set(authorizationPayloadKey, payload)
 		ctx.Next()
 	}

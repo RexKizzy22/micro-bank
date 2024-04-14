@@ -216,21 +216,21 @@ To transfer $10 from account1 to account2, we have to:
 1. **Atomicity**: Either all the operations complete successfully or the transactions fail and the db is unchanged
 2. **Consistency**: The db state must be valid after every transaction. All constraints must be satisfied
 3. **Isolation**: Concurrent transactions must not affect each other
-4. **Durabiltiy**: Data successfully written by a transaction must be recorded in a persistent storage
+4. **Durability**: Data successfully written by a transaction must be recorded in a persistent storage
 
 **Database transactions usually have 4 isolation levels as defined by the American National Standard Institute (ANSI). These levels define when a change made by one transaction is visible to the other**
 
 - Read Uncommitted: Transactions can see data written by other uncommitted transactions
 - Read Committed: Transactions can only see data written by other committed transactions
 - Repeatable Read: Same read query always returns same results
-- Serializable: Can achieve same result if we execute transactions serially in some order instead of concurrently
+- Serializable: Can achieve same result if we execute transactions serially in some order as well as concurrently
 
 **These levels are usually associated with 4 read phenomena:**
 
 - **Dirty read**: A transaction reads data written by other concurrent uncommitted transaction
 - **Non-repeatable read**: A transaction reads the same row twice and sees different values because it has been modified by other committed transaction
 - **Phantom read**: A transation re-executes a query to find rows that satisfy a condition and sees a different set of rows, due to changes by other committed transaction
-- **Serialization anomal**: The result of a group of concurrent committed transactions is impossible to achieve if we run them sequentially in any order without overlapping
+- **Serialization anomaly**: The result of a group of concurrent committed transactions is impossible to achieve if we run them sequentially in any order without overlapping
 
 **MySQL vs PostgresSQL**
 MySQL

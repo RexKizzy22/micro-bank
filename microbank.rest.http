@@ -1,0 +1,189 @@
+@hostname = http://localhost:8080/v1
+
+
+# ========== Users ==================
+
+# @name renew_access
+POST {{hostname}}/tokens/renew_access
+Content-Type: application/json
+
+{
+    "refresh_token": ""
+}
+
+// Sample Login Response
+# {
+#   "access_token": "",
+#   "access_token_expires_at": "",
+# }
+
+
+###
+
+# @name create_user
+POST {{hostname}}/user
+Content-Type: application/json
+
+{
+    "username": "vracy",
+    "email": "vracy@gmail.com",
+    "full_name": "vracy earlyson",
+    "password": "vracy1111"
+}
+
+# Sample Create User Response
+# {
+#     "username": "mickey44",
+#     "full_name": "mickey corsey",
+#     "email": "mickey@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2022-07-20T17:03:48.413436Z"
+# }
+
+
+###
+
+# @name login_user
+POST {{hostname}}/user/login
+Content-Type: application/json
+
+{
+    "username": "vracy",
+    "password": "vracy1111"
+}
+
+// Sample Login Response
+# {
+#   "user": {
+#     "username": "tracy",
+#     "full_name": "tracy earlyson",
+#     "email": "tracy@gmail.com",
+#     "password_changed_at": "0001-01-01T00:00:00Z",
+#     "created_at": "2024-04-14T09:56:32.215188Z"
+#   },
+#   "access_token": {{access_token}},
+#   "refresh_token": {{refresh_token}},
+#   "access_token_expires_at": "2024-04-14T10:20:42.107118Z",
+#   "refresh_token_expires_at": "2024-04-15T10:05:42.107382Z"
+# }
+
+
+@access_token = {{login_user.response.body.access_token}}
+@refresh_token = {{login_user.response.body.refresh_token}}
+
+
+
+# ========= Accounts =============== 
+###
+
+# @name create_account
+POST {{hostname}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "currency": "CAD"
+}
+
+# Sample Create Account Response
+# {
+#     "id": 1,
+#     "owner": "mickey44",
+#     "balance": 0,
+#     "currency": "USD",
+#     "created_at": "2022-07-20T19:41:41.58767Z"
+# }
+
+
+###
+
+# @name get_account
+GET {{hostname}}/accounts/2
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+# Sample Create Account Response
+# {
+#     "id": 1,
+#     "owner": "mickey44",
+#     "balance": 0,
+#     "currency": "USD",
+#     "created_at": "2022-07-20T19:41:41.58767Z"
+# }
+
+
+###
+
+# @name list_accounts
+GET {{hostname}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "page_id": "1",
+    "page_size": "5",
+}
+
+# Sample Create Account Response
+# [
+#     {
+#         "id": 1,
+#         "owner": "mickey44",
+#         "balance": 0,
+#         "currency": "USD",
+#         "created_at": "2022-07-20T19:41:41.58767Z"
+#     }
+# ]
+
+
+###
+
+# @name create_transfers
+POST {{hostname}}/transfers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "from_account_id": "USD",
+    "to_account_id": 100,
+    "from_account_id": 3,
+    "amount": 100,
+    "currency": "USD"
+}
+
+# Sample Transfer response
+# {
+#     "transfer": {
+#         "id": 1,
+#         "from_account_id": 3,
+#         "to_account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "from_account": {
+#         "id": 3,
+#         "owner": "justin24",
+#         "balance": -100,
+#         "currency": "USD",
+#         "created_at": "2022-07-21T08:26:08.397327Z"
+#     },
+#     "to_account": {
+#         "id": 1,
+#         "owner": "mickey44",
+#         "balance": 100,
+#         "currency": "USD",
+#         "created_at": "2022-07-20T19:41:41.58767Z"
+#     },
+#     "from_entry": {
+#         "id": 1,
+#         "account_id": 3,
+#         "amount": -100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     },
+#     "to_entry": {
+#         "id": 2,
+#         "account_id": 1,
+#         "amount": 100,
+#         "created_at": "2022-07-21T08:30:48.924249Z"
+#     }
+# }

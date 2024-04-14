@@ -13,7 +13,7 @@ Table users as U {
   email varchar [unique, not null]
   is_email_verified bool [not null, default: false]
   password_changed_at timestamptz [not null, default: '0001-01-01 00:00:00Z']
-  created_at timestamptz [not null]
+  created_at timestamptz [not null, default: `now()`]
 }
 
 Table verify_emails {
