@@ -27,7 +27,8 @@ func (store *SQLStore) CreateUserTx(ctx context.Context, arg CreateUserTxParams)
 			return err
 		}
 
-		return arg.AfterCreate(result.User)
+		// return arg.AfterCreate(result.User)
+		return nil
 	})
 
 	return result, err

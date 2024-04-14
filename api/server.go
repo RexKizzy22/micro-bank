@@ -51,15 +51,17 @@ func (server *Server) Routes() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	v1 := router.Group("/v1")
 
-	router.POST("/user", server.createUser)
-	router.POST("/user/login", server.loginUser)
-	router.POST("/tokens/renew_access", server.renewAccessToken)
+	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	v1.POST("/user", server.createUser)
+	v1.POST("/user/login", server.loginUser)
+	v1.POST("/tokens/renew_access", server.renewAccessToken)
 	// TODO: log out handler
 	// router.POST("/logout", server.logout)
 
-	authRoutes := router.Group("/").Use(authMiddleware(server.token))
+	authRoutes := v1.Group("/").Use(authMiddleware(server.token))
 
 	authRoutes.POST("/accounts", server.createAccount)
 	authRoutes.GET("/accounts/:id", server.getAccount)

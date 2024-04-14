@@ -13,7 +13,7 @@ func TestTransferTx(t *testing.T) {
 
 	errs := make(chan error)
 	results := make(chan TransferTxResult)
-	
+
 	n := 5
 	amount := int64(10)
 	existed := make(map[int]bool)
@@ -95,7 +95,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotContains(t, existed, k)
 		existed[k] = true
 	}
-	
+
 	updatedAccount1, err := testStore.GetAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 
@@ -109,11 +109,11 @@ func TestTransferTx(t *testing.T) {
 func TestTransferTxDeadlock(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
-	
+
 	n := 10
 	amount := int64(10)
 	errs := make(chan error)
-	
+
 	// run n concurrent transfer transactions
 	for i := 0; i < n; i++ {
 		fromAccountID := account1.ID
@@ -139,7 +139,7 @@ func TestTransferTxDeadlock(t *testing.T) {
 		err := <-errs
 		require.NoError(t, err)
 	}
-	
+
 	updatedAccount1, err := testStore.GetAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 

@@ -9,5 +9,6 @@ setenv PG_IMAGE ""
 setenv POSTGRES_PASSWORD ""
 setenv POSTGRES_USER ""
 setenv FILE_NAME ""
+ 
 make: Leaving directory `/Users/emmanuel/Desktop/home/golang/micro-bank'
  
