@@ -20,6 +20,7 @@ type Querier interface {
 	CreateVerifyEmail(ctx context.Context, arg CreateVerifyEmailParams) (VerifyEmail, error)
 	DeleteAccount(ctx context.Context, id int64) error
 	DeleteEntry(ctx context.Context, id int64) error
+	DeleteSession(ctx context.Context, id uuid.UUID) error
 	DeleteTrasfer(ctx context.Context, id int64) error
 	GetAccount(ctx context.Context, id int64) (Account, error)
 	// FOR UPDATE make read operations lock in a transaction

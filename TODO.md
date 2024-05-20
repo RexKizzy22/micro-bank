@@ -1,7 +1,5 @@
 # TODO
 
-- Implement Log Out API
-- Fix TransferTx bug
 - Write tests for transfer API
 - Complete other tests for Users API
 - Write TestLoginUserAPI
