@@ -111,6 +111,9 @@ test:
 # Generate database mock utilities for testing
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/Rexkizzy22/micro-bank/db/sqlc Store
+
+# Generate database mock utilities for testing redis task
+task-mock:
 	mockgen -package mockwk -destination task/mock/distributor.go github.com/Rexkizzy22/micro-bank/task TaskDistributor
 
 # Retrive authentication token from AWS ECR in order to gain access to remote container

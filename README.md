@@ -25,9 +25,9 @@ docker-compose up --build
 
 ### 2. Localhost (Macbook) - (Requires more installations on your machine)
 
-**Microbank implements HTTP, gRPC Gateway and gRPC servers**
+Microbank implements **HTTP**, **gRPC Gateway** and **gRPC servers**
 
-**gRPC Gateway server serves both HTTP and gRPC requests**
+**gRPC Gateway** server serves both **HTTP** and **gRPC requests**
 
 #### Pre-requisites
 1. [Homebrew](https://brew.sh/)
