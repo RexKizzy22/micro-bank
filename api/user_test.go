@@ -70,10 +70,12 @@ func TestCreateUserAPI(t *testing.T) {
 				"password":  password,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
+				hashedPassword, _ := util.HashPassword(password)
 				arg := db.CreateUserParams{
 					Username: user.Username,
 					Email:    user.Email,
 					FullName: user.FullName,
+					HashedPassword: hashedPassword,
 				}
 				store.EXPECT().
 					CreateUser(gomock.Any(), EqCreateUserMatcher(arg, password)).
@@ -170,7 +172,7 @@ func TestCreateUserAPI(t *testing.T) {
 			body, err := json.Marshal(tc.body)
 			require.NoError(t, err)
 
-			url := "/user"
+			url := "/v1/user"
 			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
 			require.NoError(t, err)
 
