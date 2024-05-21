@@ -58,8 +58,7 @@ func (server *Server) Routes() {
 	v1.POST("/user", server.createUser)
 	v1.POST("/user/login", server.loginUser)
 	v1.POST("/tokens/renew_access", server.renewAccessToken)
-	// TODO: log out handler
-	// router.POST("/logout", server.logout)
+	router.POST("/logout", server.logout)
 
 	authRoutes := v1.Group("/").Use(authMiddleware(server.token))
 
