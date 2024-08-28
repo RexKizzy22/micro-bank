@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// stores all configurations of the application
+// stores all configurations of the application.
 // values are read by viper from the config file or environment variables
 type Config struct {
 	AppEnv               string        `mapstructure:"APP_ENV"`

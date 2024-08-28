@@ -72,9 +72,9 @@ func TestCreateUserAPI(t *testing.T) {
 			buildStubs: func(store *mockdb.MockStore) {
 				hashedPassword, _ := util.HashPassword(password)
 				arg := db.CreateUserParams{
-					Username: user.Username,
-					Email:    user.Email,
-					FullName: user.FullName,
+					Username:       user.Username,
+					Email:          user.Email,
+					FullName:       user.FullName,
 					HashedPassword: hashedPassword,
 				}
 				store.EXPECT().
