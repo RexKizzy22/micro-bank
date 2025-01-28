@@ -10,7 +10,7 @@ import (
 	"github.com/Rexkizzy22/micro-bank/util"
 )
 
-// serves gRPC requests for our banking services
+// Server serves gRPC requests for our banking services
 type Server struct {
 	pb.UnimplementedMicroBankServer
 	config          util.Config
@@ -19,7 +19,7 @@ type Server struct {
 	taskDistributor task.TaskDistributor
 }
 
-// creates a new gRPC server
+// NewServer creates a new gRPC server
 func NewServer(config util.Config, store db.Store) (*Server, error) {
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {

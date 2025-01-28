@@ -68,5 +68,17 @@ Table transfers as T {
   }
 }
 
+Table sessions as S {
+  id uuid [pk]
+  username varchar [not null]
+  refresh_token varchar [not null]
+  user_agent varchar [not null]
+  client_ip varchar [unique, not null]
+  is_blocked bool [not null, default: false]
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
 Ref: T.from_account_id > A.id [delete: cascade]
 Ref: T.to_account_id > A.id [delete: cascade]
+Ref: S.username > U.username [delete: cascade]

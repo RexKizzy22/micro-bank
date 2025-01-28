@@ -98,7 +98,7 @@ Authorization: Bearer {{access_token}}
 ###
 
 # @name get_account
-GET {{hostname}}/accounts/2
+GET {{hostname}}/accounts/1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
