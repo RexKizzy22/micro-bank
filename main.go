@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+
 	// "net"
 	// "net/http"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"github.com/Rexkizzy22/micro-bank/api"
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/docs"
+
 	// "github.com/Rexkizzy22/micro-bank/gapi"
 	_ "github.com/Rexkizzy22/micro-bank/gapi/statik"
 	// "github.com/Rexkizzy22/micro-bank/mail"
@@ -23,6 +25,7 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
 	// "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/jackc/pgx/v5/pgxpool"
 	// "github.com/rakyll/statik/fs"

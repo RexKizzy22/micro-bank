@@ -25,7 +25,7 @@ func NewPasetoMaker(symmetricKey string) (Maker, error) {
 	return maker, nil
 }
 
-// creates a new token for a specific username and duration
+// CreateToken creates a new token for a specific username and duration
 func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
 	payload, err := NewPayload(username, duration)
 	if err != nil {
@@ -36,7 +36,7 @@ func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (stri
 	return token, payload, err
 }
 
-// checks if the token is valid or not
+// VerifyToken checks if the token is valid or not
 func (p *PasetoMaker) VerifyToken(token string) (*Payload, error) {
 	payload := &Payload{}
 
