@@ -119,12 +119,12 @@ func runGinServer(config util.Config, store db.Store) {
 
 // programmatically setting general swagger info
 func setSwagger(config util.Config) {
-	docs.SwaggerInfo_swagger.Title = "Micro Bank Rest API"
-	docs.SwaggerInfo_swagger.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
-	docs.SwaggerInfo_swagger.Version = "1.0.0"
-	docs.SwaggerInfo_swagger.Host = config.HTTP_ServerAddress
-	docs.SwaggerInfo_swagger.BasePath = "/"
-	docs.SwaggerInfo_swagger.Schemes = []string{"http"}
+	docs.SwaggerInfo.Title = "Micro Bank Rest API"
+	docs.SwaggerInfo.Description = "A production-grade Go API that provides money transfer services between accounts of registered users"
+	docs.SwaggerInfo.Version = "1.0.0"
+	docs.SwaggerInfo.Host = config.HTTP_ServerAddress
+	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
 }
 
 // func runGrpcServer(config util.Config, store db.Store) {

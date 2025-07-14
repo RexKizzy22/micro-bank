@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/token"
@@ -17,6 +18,30 @@ type transferRequest struct {
 	Currency      string `json:"currency" binding:"required,currency"`
 }
 
+type SwaggerTransfer struct {
+	ID            int64 `json:"id"`
+	FromAccountID int64 `json:"from_account_id"`
+	ToAccountID   int64 `json:"to_account_id"`
+	// must be positive
+	Amount    int64     `json:"amount"`
+	CreatedAt time.Time `json:"created_at"`
+}
+type SwaggerEntry struct {
+	ID        int64 `json:"id"`
+	AccountID int64 `json:"account_id"`
+	// can be negative or positive
+	Amount    int64     `json:"amount"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type SwaggerTransferResult struct {
+	Transfer    SwaggerTransfer `json:"transfer"`
+	FromAccount SwaggerAccount  `json:"from_account"`
+	ToAccount   SwaggerAccount  `json:"to_account"`
+	FromEntry   SwaggerEntry    `json:"from_entry"`
+	ToEntry     SwaggerEntry    `json:"to_entry"`
+}
+
 // @Summary   transfer money between accounts with same currency
 // @Accepts   json
 // @Produce   json
@@ -24,7 +49,7 @@ type transferRequest struct {
 // @Param     amount           body      int     true  "Amount of Money"
 // @Param     from_account_id  body      int     true  "From Account ID"
 // @Param     to_account_id    body      int     true  "To Account ID"
-// @Success   200              {object}  db.TransferTxResult
+// @Success   200              {object}  SwaggerTransferResult
 // @Security  ApiKeyAuth
 // @Router    /transfers [POST]
 func (server *Server) createTransfer(ctx *gin.Context) {

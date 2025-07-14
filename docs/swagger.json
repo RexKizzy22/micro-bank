@@ -34,7 +34,7 @@
                             "items": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/definitions/db.Account"
+                                    "$ref": "#/definitions/api.SwaggerAccount"
                                 }
                             }
                         }
@@ -66,7 +66,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Account"
+                            "$ref": "#/definitions/api.SwaggerAccount"
                         }
                     }
                 }
@@ -96,7 +96,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.Account"
+                            "$ref": "#/definitions/api.SwaggerAccount"
                         }
                     }
                 }
@@ -155,7 +155,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/db.TransferTxResult"
+                            "$ref": "#/definitions/api.SwaggerTransferResult"
                         }
                     }
                 }
@@ -250,9 +250,94 @@
                     }
                 }
             }
+        },
+        "/user/logout": {
+            "post": {
+                "summary": "logs out an existing user",
+                "responses": {}
+            }
         }
     },
     "definitions": {
+        "api.SwaggerAccount": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "owner": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.SwaggerEntry": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "amount": {
+                    "description": "can be negative or positive",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.SwaggerTransfer": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "must be positive",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "from_account_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "to_account_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.SwaggerTransferResult": {
+            "type": "object",
+            "properties": {
+                "from_account": {
+                    "$ref": "#/definitions/api.SwaggerAccount"
+                },
+                "from_entry": {
+                    "$ref": "#/definitions/api.SwaggerEntry"
+                },
+                "to_account": {
+                    "$ref": "#/definitions/api.SwaggerAccount"
+                },
+                "to_entry": {
+                    "$ref": "#/definitions/api.SwaggerEntry"
+                },
+                "transfer": {
+                    "$ref": "#/definitions/api.SwaggerTransfer"
+                }
+            }
+        },
         "api.loginUserResponse": {
             "type": "object",
             "properties": {
@@ -293,85 +378,6 @@
                 },
                 "username": {
                     "type": "string"
-                }
-            }
-        },
-        "db.Account": {
-            "type": "object",
-            "properties": {
-                "balance": {
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "owner": {
-                    "type": "string"
-                }
-            }
-        },
-        "db.Entry": {
-            "type": "object",
-            "properties": {
-                "account_id": {
-                    "type": "integer"
-                },
-                "amount": {
-                    "description": "can be negative or positive",
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "db.Transfer": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "description": "must be positive",
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "from_account_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "to_account_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "db.TransferTxResult": {
-            "type": "object",
-            "properties": {
-                "from_account": {
-                    "$ref": "#/definitions/db.Account"
-                },
-                "from_entry": {
-                    "$ref": "#/definitions/db.Entry"
-                },
-                "to_account": {
-                    "$ref": "#/definitions/db.Account"
-                },
-                "to_entry": {
-                    "$ref": "#/definitions/db.Entry"
-                },
-                "transfer": {
-                    "$ref": "#/definitions/db.Transfer"
                 }
             }
         }

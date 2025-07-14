@@ -2,10 +2,12 @@ package api
 
 import (
 	"fmt"
+	"time"
 
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/token"
 	"github.com/Rexkizzy22/micro-bank/util"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -46,6 +48,18 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) Routes() {
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     server.config.AllowedOrigins,
+		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "PATCH"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
 	if server.config.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
