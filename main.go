@@ -68,7 +68,7 @@ func main() {
 		log.Fatal().Msg(err.Error())
 	}
 	// runMigration(config.MigrationURL, dbConnString)
-	runMigrationOnProd(db)
+	runMigrationOnProd(db, config)
 
 	// setup redis queue for server integration
 	// redisOpt := asynq.RedisClientOpt{
@@ -104,8 +104,8 @@ func main() {
 // 	log.Info().Msg("db migrated successfully")
 // }
 
-func runMigrationOnProd(db *sql.DB) {
-	d, err := iofs.New(migrationFiles, "migrations")
+func runMigrationOnProd(db *sql.DB, config util.Config) {
+	d, err := iofs.New(migrationFiles, config.MigrationURL)
 	if err != nil {
 		log.Fatal().Msgf("cannot create source driver: %s", err)
 	}
