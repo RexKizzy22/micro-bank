@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	db "github.com/Rexkizzy22/micro-bank/db/sqlc"
 	"github.com/Rexkizzy22/micro-bank/token"
@@ -13,11 +14,19 @@ type createAccountRequest struct {
 	Currency string `json:"currency" binding:"required,currency"`
 }
 
+type SwaggerAccount struct {
+	ID        int64     `json:"id"`
+	Owner     string    `json:"owner"`
+	Balance   int64     `json:"balance"`
+	Currency  string    `json:"currency"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 // @Summary   creates a new account with a given currency
 // @Accepts   json
 // @Produce   json
 // @Param     currency  body      string  true  "Account Currency"
-// @Success   200       {object}  db.Account
+// @Success   200       {object}  SwaggerAccount
 // @Security  ApiKeyAuth
 // @Router    /accounts [POST]
 func (server *Server) createAccount(ctx *gin.Context) {
@@ -55,7 +64,7 @@ type getAccountRequest struct {
 // @Accepts   json
 // @Produce   json
 // @Param     id   path      string  true  "User ID"
-// @Success   200  {object}  db.Account
+// @Success   200  {object}  SwaggerAccount
 // @Security  ApiKeyAuth
 // @Router    /accounts/:id [GET]
 func (server *Server) getAccount(ctx *gin.Context) {
@@ -95,7 +104,7 @@ type listAccountRequest struct {
 // @Accepts   json
 // @Produce   json
 // @Param     currency  body     string  true  "Account Currency"
-// @Success   200       {array}  []db.Account
+// @Success   200       {array}  []SwaggerAccount
 // @Security  ApiKeyAuth
 // @Router    /accounts [GET]
 func (server *Server) listAccount(ctx *gin.Context) {

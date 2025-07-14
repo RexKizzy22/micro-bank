@@ -21,6 +21,7 @@ type Config struct {
 	EmailSenderName      string        `mapstructure:"EMAIL_SENDER_NAME"`
 	EmailSenderPassword  string        `mapstructure:"EMAIL_SENDER_PASSWORD"`
 	EmailSenderAddress   string        `mapstructure:"EMAIL_SENDER_Address"`
+	AllowedOrigins       []string      `mapstructure:"ALLOWED_ORIGINS"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -34,6 +35,7 @@ func LoadConfig(path string) (config Config, err error) {
 
 	viper.SetDefault("PROD_DB_SOURCE", "")
 	viper.SetDefault("APP_ENV", "")
+	viper.SetDefault("ALLOWED_ORIGINS", "")
 
 	err = viper.ReadInConfig()
 	if err != nil {

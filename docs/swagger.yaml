@@ -1,4 +1,56 @@
 definitions:
+  api.SwaggerAccount:
+    properties:
+      balance:
+        type: integer
+      created_at:
+        type: string
+      currency:
+        type: string
+      id:
+        type: integer
+      owner:
+        type: string
+    type: object
+  api.SwaggerEntry:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        description: can be negative or positive
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+    type: object
+  api.SwaggerTransfer:
+    properties:
+      amount:
+        description: must be positive
+        type: integer
+      created_at:
+        type: string
+      from_account_id:
+        type: integer
+      id:
+        type: integer
+      to_account_id:
+        type: integer
+    type: object
+  api.SwaggerTransferResult:
+    properties:
+      from_account:
+        $ref: '#/definitions/api.SwaggerAccount'
+      from_entry:
+        $ref: '#/definitions/api.SwaggerEntry'
+      to_account:
+        $ref: '#/definitions/api.SwaggerAccount'
+      to_entry:
+        $ref: '#/definitions/api.SwaggerEntry'
+      transfer:
+        $ref: '#/definitions/api.SwaggerTransfer'
+    type: object
   api.loginUserResponse:
     properties:
       access_token:
@@ -27,58 +79,6 @@ definitions:
       username:
         type: string
     type: object
-  db.Account:
-    properties:
-      balance:
-        type: integer
-      created_at:
-        type: string
-      currency:
-        type: string
-      id:
-        type: integer
-      owner:
-        type: string
-    type: object
-  db.Entry:
-    properties:
-      account_id:
-        type: integer
-      amount:
-        description: can be negative or positive
-        type: integer
-      created_at:
-        type: string
-      id:
-        type: integer
-    type: object
-  db.Transfer:
-    properties:
-      amount:
-        description: must be positive
-        type: integer
-      created_at:
-        type: string
-      from_account_id:
-        type: integer
-      id:
-        type: integer
-      to_account_id:
-        type: integer
-    type: object
-  db.TransferTxResult:
-    properties:
-      from_account:
-        $ref: '#/definitions/db.Account'
-      from_entry:
-        $ref: '#/definitions/db.Entry'
-      to_account:
-        $ref: '#/definitions/db.Account'
-      to_entry:
-        $ref: '#/definitions/db.Entry'
-      transfer:
-        $ref: '#/definitions/db.Transfer'
-    type: object
 info:
   contact: {}
 paths:
@@ -99,7 +99,7 @@ paths:
           schema:
             items:
               items:
-                $ref: '#/definitions/db.Account'
+                $ref: '#/definitions/api.SwaggerAccount'
               type: array
             type: array
       security:
@@ -119,7 +119,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Account'
+            $ref: '#/definitions/api.SwaggerAccount'
       security:
       - ApiKeyAuth: []
       summary: creates a new account with a given currency
@@ -137,7 +137,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.Account'
+            $ref: '#/definitions/api.SwaggerAccount'
       security:
       - ApiKeyAuth: []
       summary: gets an existing account for a specified User ID
@@ -174,7 +174,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/db.TransferTxResult'
+            $ref: '#/definitions/api.SwaggerTransferResult'
       security:
       - ApiKeyAuth: []
       summary: transfer money between accounts with same currency
@@ -236,6 +236,10 @@ paths:
           schema:
             $ref: '#/definitions/api.loginUserResponse'
       summary: log in an existing user
+  /user/logout:
+    post:
+      responses: {}
+      summary: logs out an existing user
 securityDefinitions:
   ApiAuthKey:
     in: header

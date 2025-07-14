@@ -1,6 +1,8 @@
 package db
 
-import "context"
+import (
+	"context"
+)
 
 // contains the input parameters of the transfer transaction
 type TransferTxParams struct {
