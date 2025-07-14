@@ -6,7 +6,11 @@ import (
 
 	// "net"
 	// "net/http"
+	"database/sql"
+	"embed"
 	"os"
+
+	_ "github.com/lib/pq"
 
 	// "github.com/hibiken/asynq"
 	"github.com/rs/zerolog"
@@ -23,8 +27,9 @@ import (
 	// "github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 
 	// "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -33,6 +38,9 @@ import (
 	// "google.golang.org/grpc/reflection"
 	// "google.golang.org/protobuf/encoding/protojson"
 )
+
+//go:embed db/migration/*.sql
+var migrationFiles embed.FS
 
 // @securitydefinitions.apiKey  ApiAuthKey
 // @in                          header
@@ -52,11 +60,15 @@ func main() {
 	if err != nil {
 		log.Fatal().Msgf("unable to connect to database: %s", err)
 	}
+	store := db.NewStore(conn)
 
 	// run db migration
-	runMigration(config.MigrationURL, dbConnString)
-
-	store := db.NewStore(conn)
+	db, err := sql.Open("postgres", config.DBSource)
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+	// runMigration(config.MigrationURL, dbConnString)
+	runMigrationOnProd(db)
 
 	// setup redis queue for server integration
 	// redisOpt := asynq.RedisClientOpt{
@@ -79,17 +91,38 @@ func main() {
 	// runGrpcServer(config, store)
 }
 
-func runMigration(migrationURL string, dbSource string) {
-	migration, err := migrate.New(migrationURL, dbSource)
+// func runMigrationOnLocal(migrationURL string, dbSource string) {
+// 	migration, err := migrate.New(migrationURL, dbSource)
+// 	if err != nil {
+// 		log.Fatal().Msgf("cannot create migration instance: %s", err)
+// 	}
+
+// 	if err := migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+// 		log.Fatal().Msgf("failed to run UP migration: %s", err)
+// 	}
+
+// 	log.Info().Msg("db migrated successfully")
+// }
+
+func runMigrationOnProd(db *sql.DB) {
+	d, err := iofs.New(migrationFiles, "migrations")
+	if err != nil {
+		log.Fatal().Msgf("cannot create source driver: %s", err)
+	}
+
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		log.Fatal().Msgf("cannot create database driver: %s", err)
+	}
+
+	m, err := migrate.NewWithInstance("iofs", d, "postgres", driver)
 	if err != nil {
 		log.Fatal().Msgf("cannot create migration instance: %s", err)
 	}
 
-	if err := migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		log.Fatal().Msgf("failed to run UP migration: %s", err)
 	}
-
-	log.Info().Msg("db migrated successfully")
 }
 
 // func runTaskProcessor(config util.Config, redisOpt *asynq.RedisClientOpt, store db.Store) {
