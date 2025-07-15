@@ -6,11 +6,8 @@ import (
 
 	// "net"
 	// "net/http"
-	"database/sql"
 	"embed"
 	"os"
-
-	_ "github.com/lib/pq"
 
 	// "github.com/hibiken/asynq"
 	"github.com/rs/zerolog"
@@ -27,7 +24,7 @@ import (
 	// "github.com/Rexkizzy22/micro-bank/task"
 	"github.com/Rexkizzy22/micro-bank/util"
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
@@ -63,12 +60,8 @@ func main() {
 	store := db.NewStore(conn)
 
 	// run db migration
-	db, err := sql.Open("postgres", config.DBSource)
-	if err != nil {
-		log.Fatal().Msg(err.Error())
-	}
+	runMigrationOnProd(config.MigrationURL, dbConnString)
 	// runMigration(config.MigrationURL, dbConnString)
-	runMigrationOnProd(db, config)
 
 	// setup redis queue for server integration
 	// redisOpt := asynq.RedisClientOpt{
@@ -104,18 +97,13 @@ func main() {
 // 	log.Info().Msg("db migrated successfully")
 // }
 
-func runMigrationOnProd(db *sql.DB, config util.Config) {
-	d, err := iofs.New(migrationFiles, config.MigrationURL)
+func runMigrationOnProd(migrationURL string, source string) {
+	d, err := iofs.New(migrationFiles, migrationURL)
 	if err != nil {
 		log.Fatal().Msgf("cannot create source driver: %s", err)
 	}
 
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	if err != nil {
-		log.Fatal().Msgf("cannot create database driver: %s", err)
-	}
-
-	m, err := migrate.NewWithInstance("iofs", d, "postgres", driver)
+	m, err := migrate.NewWithSourceInstance("iofs", d, source)
 	if err != nil {
 		log.Fatal().Msgf("cannot create migration instance: %s", err)
 	}
