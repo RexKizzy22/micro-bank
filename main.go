@@ -98,7 +98,7 @@ func main() {
 // }
 
 func runMigrationOnProd(migrationURL string, source string) {
-	d, err := iofs.New(migrationFiles, migrationURL)
+	d, err := iofs.New(migrationFiles, "db/migration")
 	if err != nil {
 		log.Fatal().Msgf("cannot create source driver: %s", err)
 	}
