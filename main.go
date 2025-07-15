@@ -60,7 +60,7 @@ func main() {
 	store := db.NewStore(conn)
 
 	// run db migration
-	runMigrationOnProd(config.MigrationURL, dbConnString)
+	runMigrationOnProd(dbConnString)
 	// runMigration(config.MigrationURL, dbConnString)
 
 	// setup redis queue for server integration
@@ -97,7 +97,7 @@ func main() {
 // 	log.Info().Msg("db migrated successfully")
 // }
 
-func runMigrationOnProd(migrationURL string, source string) {
+func runMigrationOnProd(source string) {
 	d, err := iofs.New(migrationFiles, "db/migration")
 	if err != nil {
 		log.Fatal().Msgf("cannot create source driver: %s", err)
